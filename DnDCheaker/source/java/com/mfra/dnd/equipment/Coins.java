@@ -1,4 +1,4 @@
-package com.mfra.equipment;
+package com.mfra.dnd.equipment;
 
 import java.util.HashMap;
 import com.mfra.dnd.checker.ACheckeable;

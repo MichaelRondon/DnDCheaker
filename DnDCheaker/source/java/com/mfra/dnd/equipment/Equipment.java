@@ -1,4 +1,4 @@
-package com.mfra.equipment;
+package com.mfra.dnd.equipment;
 
 /**
  * @author Michael Felipe Rondón Acosta
