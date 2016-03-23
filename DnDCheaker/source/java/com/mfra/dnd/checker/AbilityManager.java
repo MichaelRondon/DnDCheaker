@@ -1,10 +1,8 @@
 package com.mfra.dnd.checker;
 
-import java.util.HashMap;
-
 import com.mfra.dnd.manager.ACheckManager;
 import com.mfra.dnd.util.DescProperty;
-import com.mfra.dnd.util.DnDUtil;
+import com.mfra.dnd.util.IBasicData;
 import com.mfra.exceptions.GeneralException;
 
 /**
@@ -16,17 +14,12 @@ public class AbilityManager extends ACheckManager {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	/**
-	 * 
-	 */
-	protected final HashMap<String, Object> descProperties;
 
 	/**
 	 * @param checkProperties
 	 */
-	public AbilityManager(HashMap<Enum<?>, ACheckeable> checkProperties, HashMap<String, Object> descProperties) {
-		super(checkProperties);
-		this.descProperties = descProperties;
+	public AbilityManager(IBasicData iBasicData) {
+		super(iBasicData);
 	}
 
 	/**
@@ -35,13 +28,13 @@ public class AbilityManager extends ACheckManager {
 	 * @throws GeneralException
 	 */
 	public void addToAbility(Ability.AbilityName name, int valueToAdd) throws GeneralException {
-		if (DnDUtil.getInstance().wasCreated(descProperties)) {
-			Object object = descProperties.get(DescProperty.AVAILABLE_ABILITY_POINTS.toString());
+		if (iBasicData.wasCreated()) {
+			Object object = iBasicData.getDescProperty(DescProperty.AVAILABLE_ABILITY_POINTS.toString());
 			if (!(object instanceof Integer) || ((Integer) object) < valueToAdd) {
 				throw new GeneralException("You don't have enought available ability points!");
 			}
 			int availablePoints = ((Integer) object) - valueToAdd;
-			descProperties.put(DescProperty.AVAILABLE_ABILITY_POINTS.toString(), availablePoints);
+			iBasicData.putDescProperty(DescProperty.AVAILABLE_ABILITY_POINTS.toString(), availablePoints);
 		}
 		ACheckeable property = super.getProperty(name);
 		if (property instanceof Ability) {
@@ -73,12 +66,12 @@ public class AbilityManager extends ACheckManager {
 
 	@Override
 	public void init() {
-		super.setProperty(new Ability(Ability.AbilityName.CHARISMA, 0, this.checkProperties));
-		super.setProperty(new Ability(Ability.AbilityName.CONSTITUTION, 0, this.checkProperties));
-		super.setProperty(new Ability(Ability.AbilityName.DEXTERITY, 0, this.checkProperties));
-		super.setProperty(new Ability(Ability.AbilityName.INTELLIGENCE, 0, this.checkProperties));
-		super.setProperty(new Ability(Ability.AbilityName.STRENGTH, 0, this.checkProperties));
-		super.setProperty(new Ability(Ability.AbilityName.WISDOM, 0, this.checkProperties));
+		super.setProperty(new Ability(Ability.AbilityName.CHARISMA, 0, this.iBasicData));
+		super.setProperty(new Ability(Ability.AbilityName.CONSTITUTION, 0, this.iBasicData));
+		super.setProperty(new Ability(Ability.AbilityName.DEXTERITY, 0, this.iBasicData));
+		super.setProperty(new Ability(Ability.AbilityName.INTELLIGENCE, 0, this.iBasicData));
+		super.setProperty(new Ability(Ability.AbilityName.STRENGTH, 0, this.iBasicData));
+		super.setProperty(new Ability(Ability.AbilityName.WISDOM, 0, this.iBasicData));
 
 	}
 
@@ -87,8 +80,8 @@ public class AbilityManager extends ACheckManager {
 	 * @param value
 	 */
 	public void setAbility(Ability.AbilityName name, int value) {
-		if (!DnDUtil.getInstance().wasCreated(descProperties)) {
-			super.setProperty(new Ability(name, value, this.checkProperties));
+		if (!iBasicData.wasCreated()) {
+			super.setProperty(new Ability(name, value, iBasicData));
 		}
 	}
 }

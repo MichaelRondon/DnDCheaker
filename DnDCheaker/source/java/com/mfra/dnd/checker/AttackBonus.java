@@ -1,9 +1,9 @@
 package com.mfra.dnd.checker;
 
-import java.util.HashMap;
 import com.mfra.dnd.checker.Ability.AbilityName;
 import com.mfra.dnd.dndclass.ADnDClass;
 import com.mfra.dnd.util.DnDUtil;
+import com.mfra.dnd.util.IBasicData;
 
 /**
  * @author Michael Felipe Rondón Acosta
@@ -43,8 +43,6 @@ public class AttackBonus extends ACheckeable {
 	 */
 	private static final long serialVersionUID = 3L;
 
-	private HashMap<String, Object> descProperties;
-
 	private int[] lastChecks;
 
 	/**
@@ -52,10 +50,8 @@ public class AttackBonus extends ACheckeable {
 	 * @param checkProperties
 	 * @param descProperties
 	 */
-	public AttackBonus(AttackBonus.AttackName name, HashMap<Enum<?>, ACheckeable> checkProperties,
-			HashMap<String, Object> descProperties) {
-		super(name, checkProperties, name.getAbilityName());
-		this.descProperties = descProperties;
+	public AttackBonus(AttackBonus.AttackName name, IBasicData iBasicData) {
+		super(name, iBasicData, name.getAbilityName());
 	}
 
 	/**
@@ -92,7 +88,7 @@ public class AttackBonus extends ACheckeable {
 	 * @return getBaseAttack
 	 */
 	private int[] getBaseAttack() {
-		return ((ADnDClass) this.descProperties.get(ADnDClass.KEY_NAME)).getBaseAttackBonus();
+		return ((ADnDClass) this.iBasicData.getDescProperty(ADnDClass.KEY_NAME)).getBaseAttackBonus();
 	}
 
 	@Override

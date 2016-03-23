@@ -4,7 +4,8 @@ import java.io.Serializable;
 import java.util.HashMap;
 import com.mfra.dnd.checker.ACheckeable;
 import com.mfra.dnd.feat.AFeat;
-import com.mfra.dnd.util.DnDUtil;
+import com.mfra.dnd.util.BasicData;
+import com.mfra.dnd.util.IBasicData;
 import com.mfra.exceptions.GeneralException;
 
 /**
@@ -21,11 +22,7 @@ public abstract class ACharacterElement<K extends Enum<?>> implements Serializab
 	/**
 	 * 
 	 */
-	protected final HashMap<Enum<?>, ACheckeable> checkProperties;
-	/**
-	 * 
-	 */
-	protected final HashMap<String, Object> descProperties;
+	protected final IBasicData iBasicData;
 	/**
 	 * 
 	 */
@@ -39,8 +36,17 @@ public abstract class ACharacterElement<K extends Enum<?>> implements Serializab
 	public ACharacterElement(K nameElement, HashMap<Enum<?>, ACheckeable> checkProperties,
 			HashMap<String, Object> descProperties) {
 		this.nameElement = nameElement;
-		this.checkProperties = checkProperties;
-		this.descProperties = descProperties;
+		this.iBasicData = new BasicData(checkProperties, descProperties);
+	}
+
+	/**
+	 * @param nameElement
+	 * @param checkProperties
+	 * @param descProperties
+	 */
+	public ACharacterElement(K nameElement, IBasicData iBasicData) {
+		this.nameElement = nameElement;
+		this.iBasicData = iBasicData;
 	}
 
 	/**
@@ -48,10 +54,10 @@ public abstract class ACharacterElement<K extends Enum<?>> implements Serializab
 	 */
 	protected void appendAvailableFeat(int availableFeat) {
 		Integer availableFeats = 0;
-		if (this.descProperties.get(AFeat.AVAILABLE_FEATS_KEY_NAME) != null) {
-			availableFeats = (Integer) this.descProperties.get(AFeat.AVAILABLE_FEATS_KEY_NAME);
+		if (this.iBasicData.getDescProperty(AFeat.AVAILABLE_FEATS_KEY_NAME) != null) {
+			availableFeats = (Integer) this.iBasicData.getDescProperty(AFeat.AVAILABLE_FEATS_KEY_NAME);
 		}
-		this.descProperties.put(AFeat.AVAILABLE_FEATS_KEY_NAME, availableFeats + availableFeat);
+		this.iBasicData.putDescProperty(AFeat.AVAILABLE_FEATS_KEY_NAME, availableFeats + availableFeat);
 	}
 
 	/**
@@ -70,10 +76,10 @@ public abstract class ACharacterElement<K extends Enum<?>> implements Serializab
 	 * 
 	 */
 	protected void preValidation() {
-		if (this.descProperties.containsKey(this.getKeyName())) {
+		if (this.iBasicData.containsDescProperty(this.getKeyName())) {
 			throw new GeneralException("You has a " + this.getKeyName() + " Yet");
 		}
-		DnDUtil.getInstance().validAreAbilitiesSet(this.checkProperties);
+		iBasicData.validAreAbilitiesSet();
 	}
 
 	/**
@@ -81,7 +87,7 @@ public abstract class ACharacterElement<K extends Enum<?>> implements Serializab
 	 */
 	public void setElement() {
 		this.preValidation();
-		this.descProperties.put(this.getKeyName(), this);
+		this.iBasicData.putDescProperty(this.getKeyName(), this);
 	}
 
 	@Override

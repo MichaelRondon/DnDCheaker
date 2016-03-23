@@ -77,16 +77,16 @@ public class Human extends ARace {
 	protected void updateSkillPoints() {
 
 		int skillPointsToAdd = 4;
-		if (this.descProperties.containsKey(ADnDClass.KEY_NAME)) {
-			ADnDClass dndClass = (ADnDClass) this.descProperties.get(ADnDClass.KEY_NAME);
+		if (this.iBasicData.containsDescProperty(ADnDClass.KEY_NAME)) {
+			ADnDClass dndClass = (ADnDClass) this.iBasicData.getDescProperty(ADnDClass.KEY_NAME);
 			if (!dndClass.getLevel().equals(Level.FIRST)) {
 				skillPointsToAdd = 1;
 			}
 		}
 
-		Integer skillRanks = (Integer) this.descProperties.get(Skill.SKILL_POINTS);
+		Integer skillRanks = (Integer) this.iBasicData.getDescProperty(Skill.SKILL_POINTS);
 		skillRanks += skillPointsToAdd;
-		this.descProperties.put(Skill.SKILL_POINTS, skillRanks);
+		this.iBasicData.putDescProperty(Skill.SKILL_POINTS, skillRanks);
 	}
 
 }

@@ -1,9 +1,8 @@
 package com.mfra.dnd.feat;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
-import com.mfra.dnd.checker.ACheckeable;
+import com.mfra.dnd.util.IBasicData;
 
 /**
  * @author Michael Felipe Rondón Acosta
@@ -20,9 +19,8 @@ public class Acrobatic extends AFeat<Object> {
 	 * @param checkProperties
 	 * @param descProperties
 	 */
-	public Acrobatic(FeatName nameElement, HashMap<Enum<?>, ACheckeable> checkProperties,
-			HashMap<String, Object> descProperties) {
-		super(nameElement, checkProperties, descProperties);
+	public Acrobatic(FeatName nameElement, IBasicData iBasicData) {
+		super(nameElement, iBasicData);
 	}
 
 	@Override

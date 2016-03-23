@@ -1,9 +1,9 @@
 package com.mfra.dnd.checker;
 
 import java.io.Serializable;
-import java.util.HashMap;
 import com.mfra.dnd.checker.Ability.AbilityName;
 import com.mfra.dnd.dndclass.ADnDClass;
+import com.mfra.dnd.util.IBasicData;
 
 /**
  * @author Michael Felipe Rondón Acosta
@@ -47,24 +47,20 @@ public class SavingThrows extends ACheckeable implements Serializable {
 	 */
 	private static final long serialVersionUID = 2L;
 
-	private HashMap<String, Object> descProperties;
-
 	/**
 	 * @param name
 	 * @param checkProperties
 	 * @param descProperties
 	 */
-	public SavingThrows(SavingThrows.SavingThrowName name, HashMap<Enum<?>, ACheckeable> checkProperties,
-			HashMap<String, Object> descProperties) {
-		super(name, checkProperties, name.getAbilityName());
-		this.descProperties = descProperties;
+	public SavingThrows(SavingThrows.SavingThrowName name, IBasicData iBasicData) {
+		super(name, iBasicData, name.getAbilityName());
 	}
 
 	/**
 	 * @return getBaseAttack
 	 */
 	private int getBaseSavingThrow() {
-		return ((ADnDClass) this.descProperties.get(ADnDClass.KEY_NAME)).getBaseSavingThrow();
+		return ((ADnDClass) this.iBasicData.getDescProperty(ADnDClass.KEY_NAME)).getBaseSavingThrow();
 	}
 
 	@Override

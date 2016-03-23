@@ -93,7 +93,7 @@ public abstract class ARace extends ACharacterElement<ARace.RaceName> implements
 	public ARace(RaceName raceName, HashMap<Enum<?>, ACheckeable> checkProperties,
 			HashMap<String, Object> descProperties) {
 		super(raceName, checkProperties, descProperties);
-		skillManager = new SkillManager(checkProperties);
+		skillManager = new SkillManager(iBasicData);
 	}
 
 	@Override
@@ -121,7 +121,7 @@ public abstract class ARace extends ACharacterElement<ARace.RaceName> implements
 	 * @param specialsSet
 	 */
 	protected void setSpecials(Set<String> specialsSet) {
-		this.descProperties.put(SPECIALS_RACE_KEY, specialsSet);
+		this.iBasicData.putDescProperty(SPECIALS_RACE_KEY, specialsSet);
 	}
 
 	/**

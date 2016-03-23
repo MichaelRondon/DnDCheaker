@@ -288,7 +288,7 @@ public abstract class ADnDClass extends ACharacterElement<ADnDClass.DnDClassName
 	public void addXPPoints(int xpToAdd) {
 		xPPoints += xpToAdd;
 		if (xPPoints >= this.getLevel().getNextRequiredXP()) {
-			//TODO
+			// TODO
 			System.out.println("New level");
 		}
 	}
@@ -440,16 +440,16 @@ public abstract class ADnDClass extends ACharacterElement<ADnDClass.DnDClassName
 	 * 
 	 */
 	protected void updateSkillPoints() {
-		ACheckeable aCheckeable = this.checkProperties.get(Ability.AbilityName.INTELLIGENCE);
+		ACheckeable aCheckeable = this.iBasicData.getCheckProperty(Ability.AbilityName.INTELLIGENCE);
 		int baseSkillPoints = this.getName().getBaseSkillPoints();
 		int skillPointsToAdd = (aCheckeable.getModifier() + baseSkillPoints);
 
 		if (this.level.equals(Level.FIRST)) {
 			skillPointsToAdd = (skillPointsToAdd * 4);
 		}
-		Integer skillPoints = (Integer) this.descProperties.get(Skill.SKILL_POINTS);
+		Integer skillPoints = (Integer) this.iBasicData.getDescProperty(Skill.SKILL_POINTS);
 		skillPoints += skillPointsToAdd;
-		this.descProperties.put(Skill.SKILL_POINTS, skillPoints);
+		this.iBasicData.putDescProperty(Skill.SKILL_POINTS, skillPoints);
 	}
 
 }

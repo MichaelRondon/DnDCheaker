@@ -5,6 +5,7 @@ import com.mfra.dice.IDice;
 import com.mfra.dnd.checker.ACheckeable;
 import com.mfra.dnd.checker.Ability.AbilityName;
 import com.mfra.dnd.checker.AbilityWorker;
+import com.mfra.dnd.util.IBasicData;
 
 /**
  * @author Michael Felipe Rondón Acosta
@@ -18,9 +19,8 @@ public class Damage extends AbilityWorker {
 	 * @param abilityName
 	 * @param descProperties
 	 */
-	public Damage(HashMap<Enum<?>, ACheckeable> checkProperties, AbilityName abilityName,
-			HashMap<String, Object> descProperties) {
-		super(checkProperties, abilityName);
+	public Damage(HashMap<Enum<?>, ACheckeable> checkProperties, AbilityName abilityName, IBasicData iBasicData) {
+		super(iBasicData, abilityName);
 
 	}
 

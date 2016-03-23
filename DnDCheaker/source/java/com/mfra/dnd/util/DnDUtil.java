@@ -157,6 +157,7 @@ public class DnDUtil extends StringBuilderWriter {
 	 *            Texto a concatenar.
 	 * @return Concatena dos textos.
 	 */
+	@Deprecated
 	public String simpleConcat(Object... args) {
 		StringBuilder stringBuilder = new StringBuilder();
 		for (Object object : args) {
@@ -171,6 +172,7 @@ public class DnDUtil extends StringBuilderWriter {
 	/**
 	 * @param checkProperties
 	 */
+	@Deprecated
 	public void validAreAbilitiesSet(HashMap<Enum<?>, ACheckeable> checkProperties) {
 
 		AbilityName[] values = AbilityName.values();
@@ -185,6 +187,7 @@ public class DnDUtil extends StringBuilderWriter {
 	/**
 	 * @param descProperties
 	 */
+	@Deprecated
 	public void validIsClassSet(HashMap<String, Object> descProperties) {
 		if (!descProperties.containsKey(ADnDClass.KEY_NAME)) {
 			throw new GeneralException("You must set the class first");
@@ -194,12 +197,14 @@ public class DnDUtil extends StringBuilderWriter {
 	/**
 	 * @param descProperties
 	 */
+	@Deprecated
 	public void validIsRaceSet(HashMap<String, Object> descProperties) {
 		if (!descProperties.containsKey(ARace.KEY_NAME)) {
 			throw new GeneralException("You must set the race first");
 		}
 	}
 
+	@Deprecated
 	public boolean wasCreated(HashMap<String, Object> descProperties) {
 		boolean resp = false;
 		if ((descProperties != null) && (descProperties.containsKey(DescProperty.CREATED.toString()))) {

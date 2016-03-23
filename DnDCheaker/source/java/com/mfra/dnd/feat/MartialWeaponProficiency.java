@@ -1,9 +1,8 @@
 package com.mfra.dnd.feat;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
-import com.mfra.dnd.checker.ACheckeable;
+import com.mfra.dnd.util.IBasicData;
 import com.mfra.dnd.weapon.WeaponName;
 import com.mfra.dnd.weapon.WeaponType3;
 import com.mfra.exceptions.GeneralException;
@@ -25,9 +24,8 @@ public class MartialWeaponProficiency extends AFeat<WeaponName> {
 	 * @param checkProperties
 	 * @param descProperties
 	 */
-	public MartialWeaponProficiency(com.mfra.dnd.feat.AFeat.FeatName nameElement,
-			HashMap<Enum<?>, ACheckeable> checkProperties, HashMap<String, Object> descProperties) {
-		super(nameElement, checkProperties, descProperties);
+	public MartialWeaponProficiency(com.mfra.dnd.feat.AFeat.FeatName nameElement, IBasicData iBasicData) {
+		super(nameElement, iBasicData);
 	}
 
 	@Override

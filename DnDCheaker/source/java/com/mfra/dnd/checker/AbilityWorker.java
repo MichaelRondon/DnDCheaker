@@ -1,8 +1,8 @@
 package com.mfra.dnd.checker;
 
 import java.io.Serializable;
-import java.util.HashMap;
 import com.mfra.dice.StringBuilderWriter;
+import com.mfra.dnd.util.IBasicData;
 
 /**
  * @author Michael Felipe Rondón Acosta
@@ -19,14 +19,14 @@ public class AbilityWorker extends StringBuilderWriter implements IAbilityWorker
 	/**
 	 * 
 	 */
-	protected HashMap<Enum<?>, ACheckeable> checkProperties = new HashMap<Enum<?>, ACheckeable>();
+	protected IBasicData iBasicData;
 
 	/**
 	 * @param checkProperties
 	 * @param abilityName
 	 */
-	public AbilityWorker(HashMap<Enum<?>, ACheckeable> checkProperties, Ability.AbilityName abilityName) {
-		this.checkProperties = checkProperties;
+	public AbilityWorker(IBasicData iBasicData, Ability.AbilityName abilityName) {
+		this.iBasicData = iBasicData;
 		this.abilityName = abilityName;
 	}
 
@@ -35,7 +35,7 @@ public class AbilityWorker extends StringBuilderWriter implements IAbilityWorker
 	 */
 	@Override
 	public int getAbilityModifier() {
-		return ((Ability) this.checkProperties.get(this.getAbilityName())).getModifier();
+		return ((Ability) this.iBasicData.getCheckProperty(this.getAbilityName())).getModifier();
 	}
 
 	/**

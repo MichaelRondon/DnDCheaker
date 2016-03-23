@@ -8,7 +8,7 @@ import com.mfra.dnd.dndclass.ADnDClass;
 import com.mfra.dnd.dndclass.ADnDClass.Level;
 import com.mfra.dnd.language.Language;
 import com.mfra.dnd.language.LanguagesManager;
-import com.mfra.dnd.util.DnDUtil;
+import com.mfra.dnd.util.IBasicData;
 import com.mfra.exceptions.GeneralException;
 
 /**
@@ -24,8 +24,8 @@ public class SkillManager extends ACheckManager {
 	/**
 	 * @param checkProperties
 	 */
-	public SkillManager(HashMap<Enum<?>, ACheckeable> checkProperties) {
-		super(checkProperties);
+	public SkillManager(IBasicData iBasicData) {
+		super(iBasicData);
 		this.init();
 	}
 
@@ -52,7 +52,7 @@ public class SkillManager extends ACheckManager {
 	}
 
 	private void insertEmptySkill(Skill.SkillName skillName) {
-		Skill skill = new Skill(skillName, this.checkProperties);
+		Skill skill = new Skill(skillName, this.iBasicData);
 		this.setProperty(skill);
 	}
 
@@ -62,16 +62,16 @@ public class SkillManager extends ACheckManager {
 	}
 
 	private boolean isNotSetSkill(Skill.SkillName skillName) {
-		return !this.checkProperties.containsKey(skillName);
+		return !this.iBasicData.containsCheckProperty(skillName);
 	}
 
 	/**
 	 * @param descProperties
 	 */
 	private void prevalidation(HashMap<String, Object> descProperties) {
-		DnDUtil.getInstance().validAreAbilitiesSet(this.checkProperties);
-		DnDUtil.getInstance().validIsRaceSet(descProperties);
-		DnDUtil.getInstance().validIsClassSet(descProperties);
+		iBasicData.validAreAbilitiesSet();
+		iBasicData.validIsRaceSet();
+		iBasicData.validIsClassSet();
 	}
 
 	/**

@@ -7,7 +7,6 @@ import com.mfra.dnd.checker.Ability;
 import com.mfra.dnd.checker.Ability.AbilityName;
 import com.mfra.dnd.checker.IAbilityWorker;
 import com.mfra.dnd.race.ACharacterElement;
-import com.mfra.dnd.util.DnDUtil;
 
 /**
  * @author Michael Felipe Rondón Acosta
@@ -66,7 +65,7 @@ public abstract class ADifficultyClass extends ACharacterElement<ADifficultyClas
 	 */
 	@Override
 	public int getAbilityModifier() {
-		return ((Ability) this.checkProperties.get(this.getAbilityName())).getModifier();
+		return ((Ability) this.iBasicData.getCheckProperty(this.getAbilityName())).getModifier();
 	}
 
 	/**
@@ -90,9 +89,9 @@ public abstract class ADifficultyClass extends ACharacterElement<ADifficultyClas
 	 */
 	@Override
 	protected void preValidation() {
-		DnDUtil.getInstance().validAreAbilitiesSet(this.checkProperties);
-		DnDUtil.getInstance().validIsRaceSet(this.descProperties);
-		DnDUtil.getInstance().validIsClassSet(this.descProperties);
+		iBasicData.validAreAbilitiesSet();
+		iBasicData.validIsRaceSet();
+		iBasicData.validIsClassSet();
 	}
 
 	/**

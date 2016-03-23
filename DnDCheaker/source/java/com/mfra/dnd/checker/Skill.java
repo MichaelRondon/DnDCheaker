@@ -1,7 +1,7 @@
 package com.mfra.dnd.checker;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
+import com.mfra.dnd.util.IBasicData;
 import com.mfra.exceptions.GeneralException;
 
 /**
@@ -119,8 +119,8 @@ public class Skill extends ACheckeable {
 	 * @param name
 	 * @param checkProperties
 	 */
-	public Skill(SkillName name, HashMap<Enum<?>, ACheckeable> checkProperties) {
-		super(name, checkProperties, name.getAbilityName());
+	public Skill(SkillName name, IBasicData iBasicData) {
+		super(name, iBasicData, name.getAbilityName());
 	}
 
 	/**

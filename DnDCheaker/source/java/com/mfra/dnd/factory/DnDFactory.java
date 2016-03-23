@@ -6,6 +6,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import com.mfra.dnd.checker.ACheckeable;
 import com.mfra.dnd.race.ACharacterElement;
+import com.mfra.dnd.util.BasicData;
+import com.mfra.dnd.util.IBasicData;
 import com.mfra.exceptions.GeneralException;
 
 /**
@@ -52,7 +54,27 @@ public class DnDFactory implements Serializable {
 				throw new GeneralException("The instace is not an ACharacterElement");
 			}
 		} catch (NoSuchMethodException e) {
-			throw new GeneralException(e);
+			try {
+				Constructor<?> declaredConstructor = classTo.getDeclaredConstructor(name.getClass(), IBasicData.class);
+				Object newInstance = declaredConstructor.newInstance(name,
+						new BasicData(this.checkProperties, this.descProperties));
+				if (newInstance instanceof ACharacterElement) {
+					resp = (ACharacterElement<?>) newInstance;
+				} else {
+					throw new GeneralException("The instace is not an ACharacterElement");
+				}
+			} catch (java.lang.NoSuchMethodException e2) {
+				throw new GeneralException(e2);
+			} catch (InstantiationException e1) {
+
+				throw new GeneralException(e1);
+			} catch (IllegalAccessException e1) {
+				throw new GeneralException(e1);
+			} catch (IllegalArgumentException e1) {
+				throw new GeneralException(e1);
+			} catch (InvocationTargetException e1) {
+				throw new GeneralException(e1);
+			}
 		} catch (SecurityException e) {
 			throw new GeneralException(e);
 		} catch (InstantiationException e) {

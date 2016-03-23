@@ -61,7 +61,7 @@ public class Elf extends ARace {
 
 	@Override
 	protected void updateAbilities() {
-		AbilityManager abilityManager = new AbilityManager(this.checkProperties, this.descProperties);
+		AbilityManager abilityManager = new AbilityManager(iBasicData);
 		abilityManager.addToAbility(Ability.AbilityName.DEXTERITY, 2);
 		abilityManager.addToAbility(Ability.AbilityName.CONSTITUTION, -2);
 
@@ -70,7 +70,7 @@ public class Elf extends ARace {
 	@Override
 	protected void updateFeats() {
 		MartialWeaponProficiency martialWeaponProficiency = new MartialWeaponProficiency(
-				AFeat.FeatName.MARTIAL_WEAPON_PROFICIENCY, this.checkProperties, this.descProperties);
+				AFeat.FeatName.MARTIAL_WEAPON_PROFICIENCY, iBasicData);
 		martialWeaponProficiency.setElement(WeaponName.LONGSWORD, true);
 		martialWeaponProficiency.setElement(WeaponName.RAPIER, true);
 		martialWeaponProficiency.setElement(WeaponName.LONGBOW, true);

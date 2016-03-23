@@ -52,7 +52,7 @@ public class ArmorClass extends ADifficultyClass {
 	 * @return SizeModifier
 	 */
 	public int getSizeModifier() {
-		return ((ARace) this.descProperties.get(ARace.KEY_NAME)).getName().getSizeModifier();
+		return ((ARace) this.iBasicData.getDescProperty(ARace.KEY_NAME)).getName().getSizeModifier();
 	}
 
 	/**

@@ -44,7 +44,7 @@ public class HalfOrc extends ARace {
 
 	@Override
 	protected void updateAbilities() {
-		AbilityManager abilityManager = new AbilityManager(this.checkProperties, this.descProperties);
+		AbilityManager abilityManager = new AbilityManager(iBasicData);
 		abilityManager.addToAbility(Ability.AbilityName.STRENGTH, 2);
 		abilityManager.addToAbility(Ability.AbilityName.CHARISMA, -2);
 		abilityManager.addToAbility(Ability.AbilityName.INTELLIGENCE, -2);
@@ -59,8 +59,8 @@ public class HalfOrc extends ARace {
 
 	@Override
 	protected void updateSkillPoints() {
-		if (this.checkProperties.containsKey(Skill.SkillName.LITERATE)) {
-			this.checkProperties.remove(Skill.SkillName.LITERATE);
+		if (this.iBasicData.containsCheckProperty(Skill.SkillName.LITERATE)) {
+			iBasicData.removeCheckProperty(Skill.SkillName.LITERATE);
 		}
 		// TODO Auto-generated method stub
 

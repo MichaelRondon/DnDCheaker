@@ -31,7 +31,7 @@ public class HitPoints extends ADifficultyClass {
 	 * @return BaseHitPoints
 	 */
 	private int getClassModifier() {
-		return ((ADnDClass) this.descProperties.get(ADnDClass.KEY_NAME)).getName().getBaseHitPoints();
+		return ((ADnDClass) this.iBasicData.getDescProperty(ADnDClass.KEY_NAME)).getName().getBaseHitPoints();
 	}
 
 	/**

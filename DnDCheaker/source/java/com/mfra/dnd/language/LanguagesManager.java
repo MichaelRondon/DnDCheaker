@@ -9,7 +9,6 @@ import com.mfra.dnd.checker.Skill;
 import com.mfra.dnd.dndclass.ADnDClass;
 import com.mfra.dnd.race.ACharacterElement;
 import com.mfra.dnd.race.ARace;
-import com.mfra.dnd.util.DnDUtil;
 import com.mfra.exceptions.GeneralException;
 
 /**
@@ -46,7 +45,8 @@ public class LanguagesManager extends ACharacterElement<LanguagesManager.Languag
 	}
 
 	private void addAutoLanguages() {
-		Set<Language> setOfAutoLenguages = ((ARace) this.descProperties.get(ARace.KEY_NAME)).getSetOfAutoLenguages();
+		Set<Language> setOfAutoLenguages = ((ARace) this.iBasicData.getDescProperty(ARace.KEY_NAME))
+				.getSetOfAutoLenguages();
 		this.languages.addAll(setOfAutoLenguages);
 	}
 
@@ -55,9 +55,9 @@ public class LanguagesManager extends ACharacterElement<LanguagesManager.Languag
 	 */
 	public void addBonusLanguage(Language language) {
 		if ((language != null) && (this.bonusLanguagesPoints > 0)
-				&& (((ADnDClass) this.descProperties.get(ADnDClass.KEY_NAME)).getSetOfBonusLenguages()
+				&& (((ADnDClass) this.iBasicData.getDescProperty(ADnDClass.KEY_NAME)).getSetOfBonusLenguages()
 						.contains(language)
-						|| ((ARace) this.descProperties.get(ARace.KEY_NAME)).getSetOfBonusLenguages()
+						|| ((ARace) this.iBasicData.getDescProperty(ARace.KEY_NAME)).getSetOfBonusLenguages()
 								.contains(language))) {
 			this.languages.add(language);
 			--this.bonusLanguagesPoints;
@@ -74,16 +74,16 @@ public class LanguagesManager extends ACharacterElement<LanguagesManager.Languag
 	 * @param language
 	 */
 	public void addLanguage(Language language) {
-		DnDUtil.getInstance().validIsClassSet(this.descProperties);
-		if (language.equals(Language.DRUIDIC) && !((ADnDClass) this.descProperties.get(ADnDClass.KEY_NAME)).getName()
-				.equals(ADnDClass.DnDClassName.DRUID)) {
+		iBasicData.validIsClassSet();
+		if (language.equals(Language.DRUIDIC) && !((ADnDClass) this.iBasicData.getDescProperty(ADnDClass.KEY_NAME))
+				.getName().equals(ADnDClass.DnDClassName.DRUID)) {
 			throw new GeneralException("This Language is restricted");
 		}
 
 		this.languages.add(language);
-		Integer skillPoints = (Integer) this.descProperties.get(Skill.SKILL_POINTS);
+		Integer skillPoints = (Integer) this.iBasicData.getDescProperty(Skill.SKILL_POINTS);
 		skillPoints -= 1;
-		this.descProperties.put(Skill.SKILL_POINTS, skillPoints);
+		this.iBasicData.putDescProperty(Skill.SKILL_POINTS, skillPoints);
 
 	}
 
@@ -98,15 +98,15 @@ public class LanguagesManager extends ACharacterElement<LanguagesManager.Languag
 	@Override
 	protected void preValidation() {
 		super.preValidation();
-		DnDUtil.getInstance().validIsClassSet(this.descProperties);
-		DnDUtil.getInstance().validIsRaceSet(this.descProperties);
+		iBasicData.validIsClassSet();
+		iBasicData.validIsRaceSet();
 	}
 
 	@Override
 	public void setElement() {
 		super.setElement();
 		this.addAutoLanguages();
-		this.bonusLanguagesPoints = ((Ability) this.checkProperties.get(Ability.AbilityName.INTELLIGENCE))
+		this.bonusLanguagesPoints = ((Ability) this.iBasicData.getCheckProperty(Ability.AbilityName.INTELLIGENCE))
 				.getAbilityModifier();
 	}
 

@@ -1,9 +1,9 @@
 package com.mfra.dnd.checker;
 
 import java.io.Serializable;
-import java.util.HashMap;
 import com.mfra.dice.Dice;
 import com.mfra.dice.IDice;
+import com.mfra.dnd.util.IBasicData;
 
 /**
  * @author Michael Felipe Rondón Acosta
@@ -26,8 +26,8 @@ public abstract class ACheckeable extends AbilityWorker implements Serializable 
 	 * @param checkProperties
 	 * @param abilityName
 	 */
-	public ACheckeable(Enum<?> name, HashMap<Enum<?>, ACheckeable> checkProperties, Ability.AbilityName abilityName) {
-		super(checkProperties, abilityName);
+	public ACheckeable(Enum<?> name, IBasicData iBasicData, Ability.AbilityName abilityName) {
+		super(iBasicData, abilityName);
 		this.name = name;
 	}
 

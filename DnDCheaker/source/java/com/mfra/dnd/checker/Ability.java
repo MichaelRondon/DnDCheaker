@@ -1,6 +1,6 @@
 package com.mfra.dnd.checker;
 
-import java.util.HashMap;
+import com.mfra.dnd.util.IBasicData;
 
 /**
  * @author Michael Felipe Rondón Acosta
@@ -59,8 +59,8 @@ public class Ability extends ACheckeable {
 	 * @param value
 	 * @param checkProperties
 	 */
-	public Ability(AbilityName name, int value, HashMap<Enum<?>, ACheckeable> checkProperties) {
-		super(name, checkProperties, name);
+	public Ability(AbilityName name, int value, IBasicData iBasicData) {
+		super(name, iBasicData, name);
 		this.addValue(value);
 	}
 
