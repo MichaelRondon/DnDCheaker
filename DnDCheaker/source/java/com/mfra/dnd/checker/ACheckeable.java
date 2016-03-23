@@ -10,105 +10,103 @@ import com.mfra.dice.IDice;
  */
 public abstract class ACheckeable extends AbilityWorker implements Serializable {
 
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
-    private final Enum<?> name;
+	private int lastCheck;
 
-    private boolean       success;
+	private final Enum<?> name;
 
-    private int           lastCheck;
+	private boolean success;
 
-    /**
-     * @param name
-     * @param checkProperties
-     * @param abilityName
-     */
-    public ACheckeable(Enum<?> name,
-            HashMap<Enum<?>, ACheckeable> checkProperties,
-            Ability.AbilityName abilityName) {
-        super(checkProperties, abilityName);
-        this.name = name;
-    }
-    
-    /**
-     * @param characterName
-     * @param difficultyClass
-     * @param aditionalModifier 
-//     * @return isSuccess
-     */
-    public void check(String characterName, Integer difficultyClass, int aditionalModifier) {
-        this.stringBuilder = new StringBuilder();
-        IDice rollDice =Dice.getDice(20).rollDice(null, 1, this.getModifier()+aditionalModifier);
-        
-        if(characterName!=null){
-            this.stringBuilder.append(characterName);
-            this.stringBuilder.append(" checks for ");
-            this.stringBuilder.append(this.name);
-        }else{
-            this.stringBuilder.append(" (");
-            this.stringBuilder.append(this.name);
-            this.stringBuilder.append(") ");
-        }
-        this.stringBuilder.append(System.getProperty("line.separator"));
-        this.stringBuilder.append('\t');
-        this.stringBuilder.append(rollDice.getStringFromBuilder());
-        this.stringBuilder.append(System.getProperty("line.separator"));
-        this.lastCheck = rollDice.getLastValue();
-        if (difficultyClass != null) {
-            this.success = (rollDice.getLastValue() >= difficultyClass);
-            if (this.success) {
-                this.stringBuilder.append("the result was success");
-            }
-            else {
-                this.stringBuilder.append("the result was not success");
-                
-            }
-        }
-//        return this;
-    }
+	/**
+	 * @param name
+	 * @param checkProperties
+	 * @param abilityName
+	 */
+	public ACheckeable(Enum<?> name, HashMap<Enum<?>, ACheckeable> checkProperties, Ability.AbilityName abilityName) {
+		super(checkProperties, abilityName);
+		this.name = name;
+	}
 
-    /**
-     * @return header
-     */
-    public abstract String getHeader();
+	/**
+	 * @param characterName
+	 * @param difficultyClass
+	 * @param aditionalModifier
+	 *            // * @return isSuccess
+	 */
+	public void check(String characterName, Integer difficultyClass, int aditionalModifier) {
+		this.stringBuilder = new StringBuilder();
+		IDice rollDice = Dice.getDice(20).rollDice(null, 1, this.getModifier() + aditionalModifier);
 
-    /**
-     * @return lastCheck
-     */
-    public int getLastCheck() {
-        return this.lastCheck;
-    }
+		if (characterName != null) {
+			this.stringBuilder.append(characterName);
+			this.stringBuilder.append(" checks for ");
+			this.stringBuilder.append(this.name);
+		} else {
+			this.stringBuilder.append(" (");
+			this.stringBuilder.append(this.name);
+			this.stringBuilder.append(") ");
+		}
+		this.stringBuilder.append(System.getProperty("line.separator"));
+		this.stringBuilder.append('\t');
+		this.stringBuilder.append(rollDice.getStringFromBuilder());
+		this.stringBuilder.append(System.getProperty("line.separator"));
+		this.lastCheck = rollDice.getLastValue();
+		if (difficultyClass != null) {
+			this.success = (rollDice.getLastValue() >= difficultyClass);
+			if (this.success) {
+				this.stringBuilder.append("the result was success");
+			} else {
+				this.stringBuilder.append("the result was not success");
 
-    /**
-     * @return modifier
-     */
-    public abstract int getModifier();
+			}
+		}
+		// return this;
+	}
 
-    /**
-     * @return name
-     */
-    public Enum<?> getName() {
-        return this.name;
-    }
+	/**
+	 * @return format
+	 */
+	protected abstract String getFormat();
 
-    /**
-     * @return success
-     */
-    public boolean isSuccess() {
-        return this.success;
-    }
+	/**
+	 * @return header
+	 */
+	public abstract String getHeader();
 
-    /**
-     * 
-     */
-    public abstract String toString();
+	/**
+	 * @return lastCheck
+	 */
+	public int getLastCheck() {
+		return this.lastCheck;
+	}
 
-    /**
-     * @return format
-     */
-    protected abstract String getFormat();
+	/**
+	 * @return modifier
+	 */
+	public abstract int getModifier();
+
+	/**
+	 * @return name
+	 */
+	public Enum<?> getName() {
+		return this.name;
+	}
+
+	/**
+	 * @return success
+	 */
+	public boolean isSuccess() {
+		return this.success;
+	}
+
+	/**
+	 * 
+	 */
+	@Override
+	public abstract String toString();
 
 }

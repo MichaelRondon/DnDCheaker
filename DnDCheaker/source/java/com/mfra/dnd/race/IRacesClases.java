@@ -8,8 +8,8 @@ import com.mfra.dnd.language.Language;
  */
 public interface IRacesClases {
 
-    /**
-     * @return SetOfLenguages
-     */
-    public abstract Set<Language> getSetOfBonusLenguages();
+	/**
+	 * @return SetOfLenguages
+	 */
+	public abstract Set<Language> getSetOfBonusLenguages();
 }

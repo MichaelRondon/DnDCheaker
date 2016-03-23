@@ -10,27 +10,24 @@ import com.mfra.dnd.checker.AttackBonus.AttackName;
  */
 public class AttackBonusManager extends ACheckManager {
 
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
-    private HashMap<String, Object> descProperties;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private HashMap<String, Object> descProperties;
 
-    /**
-     * @param checkProperties
-     * @param descProperties
-     */
-    public AttackBonusManager(HashMap<Enum<?>, ACheckeable> checkProperties,
-            HashMap<String, Object> descProperties) {
-        super(checkProperties);
-        this.descProperties = descProperties;
-    }
+	/**
+	 * @param checkProperties
+	 * @param descProperties
+	 */
+	public AttackBonusManager(HashMap<Enum<?>, ACheckeable> checkProperties, HashMap<String, Object> descProperties) {
+		super(checkProperties);
+		this.descProperties = descProperties;
+	}
 
-    @Override
-    public void init() {
-        super.setProperty(new AttackBonus(AttackName.MELEE_ATTACK,
-                this.checkProperties, this.descProperties));
-        super.setProperty(new AttackBonus(AttackName.RANGED_ATTACK,
-                this.checkProperties, this.descProperties));
-    }
+	@Override
+	public void init() {
+		super.setProperty(new AttackBonus(AttackName.MELEE_ATTACK, this.checkProperties, this.descProperties));
+		super.setProperty(new AttackBonus(AttackName.RANGED_ATTACK, this.checkProperties, this.descProperties));
+	}
 }

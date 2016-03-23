@@ -12,183 +12,178 @@ import com.mfra.exceptions.GeneralException;
  * @author Michael Felipe Rondón Acosta
  * @param <I>
  */
-public abstract class AFeat<I> extends ACharacterElement<AFeat.FeatName> implements Serializable{
+public abstract class AFeat<I> extends ACharacterElement<AFeat.FeatName> implements Serializable {
 
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
+	/**
+	 * @author Michael Felipe Rondón Acosta
+	 */
+	public enum FeatName {
+		/**
+		 * 
+		 */
+		ACROBATIC("", "+2 bonus on Jump and Tumble checks", Acrobatic.class),
+		/**
+		 * 
+		 */
+		MARTIAL_WEAPON_PROFICIENCY("", "Attack rolls with the selected weapon normally.", MartialWeaponProficiency.class);
 
-    /**
-     * 
-     */
-    public static final String AVAILABLE_FEATS_KEY_NAME = "AvailableFeats";
-    /**
-     * 
-     */
-    public static final String KEY_NAME                 = "Feats";
+		private String benefit;
+		private Class<?> classTo;
+		private String prerequisites;
 
-    /**
-     * @param nameElement
-     * @param checkProperties
-     * @param descProperties
-     */
-    public AFeat(FeatName nameElement,
-            HashMap<Enum<?>, ACheckeable> checkProperties,
-            HashMap<String, Object> descProperties) {
-        super(nameElement, checkProperties, descProperties);
-    }
+		private FeatName(String prerequisites, String benefit, Class<?> classTo) {
+			this.prerequisites = prerequisites;
+			this.benefit = benefit;
+			this.classTo = classTo;
+		}
 
-    @Override
-    public boolean equals(Object arg0) {
-        boolean resp = false;
-        if (arg0 instanceof AFeat) {
-            resp = ((AFeat<?>) arg0).getName().equals(this.getName());
-        }
-        return resp;
-    }
+		/**
+		 * @return benefit
+		 */
+		public String getBenefit() {
+			return this.benefit;
+		}
 
-    /**
-     * @return KeyWords
-     */
-    public abstract Set<I> getElements();
+		/**
+		 * @return class_
+		 */
+		public Class<?> getClassTo() {
+			return this.classTo;
+		}
 
-    /**
-     * 
-     */
-    public void setElement() {
-        this.setElement(null, false);
-    }
+		/**
+		 * @return prerequisites
+		 */
+		public String getPrerequisites() {
+			return this.prerequisites;
+		}
+	}
 
-    /**
-     * @param element
-     * @param internal
-     */
-    public void setElement(I element, boolean internal) {
-        if (!internal) {
-            this.preValidation(element);
-        }
-        Feats feats = this.getMapOfFeats();
-        if (!feats.containsKey(this.getName())) {
-            this.addElement(element);
-            feats.put(this.getName(), this);
-        }
-        else {
-            @SuppressWarnings("unchecked")
-            AFeat<Object> aFeat = feats.get(this.getName());
-            if (aFeat.getElements().contains(element)) {
-                throw new GeneralException("You has a " + element + " Yet");
-            }
-            aFeat.addElement(element);
-        }
-        this.descProperties.put(this.getKeyName(), feats);
+	/**
+	 * 
+	 */
+	public static final String AVAILABLE_FEATS_KEY_NAME = "AvailableFeats";
+	/**
+	 * 
+	 */
+	public static final String KEY_NAME = "Feats";
 
-        if (!internal) {
-            Integer availableFeats = (Integer) this.descProperties.get(AVAILABLE_FEATS_KEY_NAME);
-            --availableFeats;
-            this.descProperties.put(AVAILABLE_FEATS_KEY_NAME, availableFeats);
-        }
-    }
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
-    public String toString() {
-        return this.getElements().toString();
-    }
+	/**
+	 * @param nameElement
+	 * @param checkProperties
+	 * @param descProperties
+	 */
+	public AFeat(FeatName nameElement, HashMap<Enum<?>, ACheckeable> checkProperties,
+			HashMap<String, Object> descProperties) {
+		super(nameElement, checkProperties, descProperties);
+	}
 
-    private Feats getMapOfFeats() {
-        Feats feats = new Feats();
-        if (!this.descProperties.containsKey(this.getKeyName())) {
-            this.descProperties.put(this.getKeyName(), feats);
-        }
-        else {
-            feats = (Feats) this.descProperties.get(this.getKeyName());
-        }
-        return feats;
-    }
+	/**
+	 * @param element
+	 */
+	protected abstract void addElement(I element);
 
-    /**
-     * @param element
-     */
-    protected abstract void addElement(I element);
+	@Override
+	public boolean equals(Object arg0) {
+		boolean resp = false;
+		if (arg0 instanceof AFeat) {
+			resp = ((AFeat<?>) arg0).getName().equals(this.getName());
+		}
+		return resp;
+	}
 
-    @Override
-    protected String getKeyName() {
-        return KEY_NAME;
-    }
+	/**
+	 * @return KeyWords
+	 */
+	public abstract Set<I> getElements();
 
-    /**
-     * @param element
-     */
-    protected void preValidation(I element) {
-        Integer availableFeats = (Integer) this.descProperties.get(AVAILABLE_FEATS_KEY_NAME);
-        if (availableFeats < 1) {
-            throw new GeneralException(
-                    "You don't have enought Feat availables to learn.");
-        }
-        Feats feats = this.getMapOfFeats();
-        if ((element == null) && feats.containsKey(this.getName())) {
-            throw new GeneralException("You has a " + this.getKeyName()
-                    + " Yet");
-        }
-        DnDUtil.getInstance().validAreAbilitiesSet(this.checkProperties);
-        DnDUtil.getInstance().validIsRaceSet(this.descProperties);
-        DnDUtil.getInstance().validIsClassSet(this.descProperties);
-        this.validPrerequisites();
-    }
+	@Override
+	protected String getKeyName() {
+		return KEY_NAME;
+	}
 
-    /**
-     * 
-     */
-    protected abstract void setBenefits();
+	private Feats getMapOfFeats() {
+		Feats feats = new Feats();
+		if (!this.descProperties.containsKey(this.getKeyName())) {
+			this.descProperties.put(this.getKeyName(), feats);
+		} else {
+			feats = (Feats) this.descProperties.get(this.getKeyName());
+		}
+		return feats;
+	}
 
-    /**
-     * 
-     */
-    protected abstract void validPrerequisites();
+	/**
+	 * @param element
+	 */
+	protected void preValidation(I element) {
+		Integer availableFeats = (Integer) this.descProperties.get(AVAILABLE_FEATS_KEY_NAME);
+		if (availableFeats < 1) {
+			throw new GeneralException("You don't have enought Feat availables to learn.");
+		}
+		Feats feats = this.getMapOfFeats();
+		if ((element == null) && feats.containsKey(this.getName())) {
+			throw new GeneralException("You has a " + this.getKeyName() + " Yet");
+		}
+		DnDUtil.getInstance().validAreAbilitiesSet(this.checkProperties);
+		DnDUtil.getInstance().validIsRaceSet(this.descProperties);
+		DnDUtil.getInstance().validIsClassSet(this.descProperties);
+		this.validPrerequisites();
+	}
 
-    /**
-     * @author Michael Felipe Rondón Acosta
-     */
-    public enum FeatName {
-        /**
-         * 
-         */
-        ACROBATIC("", "+2 bonus on Jump and Tumble checks", Acrobatic.class),
-        /**
-         * 
-         */
-        MARTIAL_WEAPON_PROFICIENCY("",
-                "Attack rolls with the selected weapon normally.",
-                MartialWeaponProficiency.class);
+	/**
+	 * 
+	 */
+	protected abstract void setBenefits();
 
-        private String   prerequisites;
-        private String   benefit;
-        private Class<?> classTo;
+	/**
+	 * 
+	 */
+	@Override
+	public void setElement() {
+		this.setElement(null, false);
+	}
 
-        private FeatName(String prerequisites, String benefit, Class<?> classTo) {
-            this.prerequisites = prerequisites;
-            this.benefit = benefit;
-            this.classTo = classTo;
-        }
+	/**
+	 * @param element
+	 * @param internal
+	 */
+	public void setElement(I element, boolean internal) {
+		if (!internal) {
+			this.preValidation(element);
+		}
+		Feats feats = this.getMapOfFeats();
+		if (!feats.containsKey(this.getName())) {
+			this.addElement(element);
+			feats.put(this.getName(), this);
+		} else {
+			@SuppressWarnings("unchecked")
+			AFeat<Object> aFeat = feats.get(this.getName());
+			if (aFeat.getElements().contains(element)) {
+				throw new GeneralException("You has a " + element + " Yet");
+			}
+			aFeat.addElement(element);
+		}
+		this.descProperties.put(this.getKeyName(), feats);
 
-        /**
-         * @return benefit
-         */
-        public String getBenefit() {
-            return this.benefit;
-        }
+		if (!internal) {
+			Integer availableFeats = (Integer) this.descProperties.get(AVAILABLE_FEATS_KEY_NAME);
+			--availableFeats;
+			this.descProperties.put(AVAILABLE_FEATS_KEY_NAME, availableFeats);
+		}
+	}
 
-        /**
-         * @return class_
-         */
-        public Class<?> getClassTo() {
-            return this.classTo;
-        }
+	@Override
+	public String toString() {
+		return this.getElements().toString();
+	}
 
-        /**
-         * @return prerequisites
-         */
-        public String getPrerequisites() {
-            return this.prerequisites;
-        }
-    }
+	/**
+	 * 
+	 */
+	protected abstract void validPrerequisites();
 }

@@ -18,413 +18,438 @@ import com.mfra.dnd.util.DnDUtil;
 /**
  * @author Michael Felipe Rondón Acosta
  */
-public abstract class ADnDClass extends
-        ACharacterElement<ADnDClass.DnDClassName> implements IRacesClases,
-        Serializable {
+public abstract class ADnDClass extends ACharacterElement<ADnDClass.DnDClassName>
+		implements IRacesClases, Serializable {
 
-    @Override
-    public String toString() {
+	/**
+	 * @author Michael Felipe Rondón Acosta
+	 */
+	public enum AttackBonusTypes {
+		/**
+		 * 
+		 */
+		AVERAGE,
+		/**
+		 * 
+		 */
+		GOOD,
+		/**
+		 * 
+		 */
+		POOR;
+	}
 
-        return DnDUtil.getInstance().simpleConcat(super.toString()," Level:",this.getLevel().level);
-    }
+	/**
+	 * @author Michael Felipe Rondón Acosta
+	 */
+	public enum DnDClassName {
+		/**
+		 * 
+		 */
+		DRUID(4, Druid.class, 2, 8, AttackBonusTypes.AVERAGE, true),
+		/**
+		 * 
+		 */
+		MONK(4, Monk.class, -1, 8, AttackBonusTypes.AVERAGE, true);
 
-    /**
-     * 
-     */
-    private static final long  serialVersionUID = 1L;
+		private AttackBonusTypes baseAttackBonusType;
+		private int baseHitPoints;
+		private int baseRndmStrtCoins;
+		private boolean baseSaveBonusPoor;
+		private int baseSkillPoints;
+		private Class<?> classTo;
 
-    /**
-     * 
-     */
-    public static final String KEY_NAME         = "DnDClass";
+		private DnDClassName(int baseSkillPoints, Class<?> classTo, int baseRndmStrtCoins, int baseHitPoints,
+				AttackBonusTypes baseAttackBonusType, boolean baseSaveBonusPoor) {
+			this.baseSkillPoints = baseSkillPoints;
+			this.classTo = classTo;
+			this.baseRndmStrtCoins = baseRndmStrtCoins;
+			this.baseHitPoints = baseHitPoints;
+			this.baseAttackBonusType = baseAttackBonusType;
+			this.baseSaveBonusPoor = baseSaveBonusPoor;
+		}
 
-    private Level              level            = Level.FIRST;
+		/**
+		 * @return baseAttackBonus
+		 */
+		public AttackBonusTypes getBaseAttackBonusType() {
+			return this.baseAttackBonusType;
+		}
 
-    /**
-     * @param dnDClassName
-     * @param checkProperties
-     * @param descProperties
-     */
-    public ADnDClass(DnDClassName dnDClassName,
-            HashMap<Enum<?>, ACheckeable> checkProperties,
-            HashMap<String, Object> descProperties) {
-        super(dnDClassName, checkProperties, descProperties);
-    }
+		/**
+		 * @return baseHitPoints
+		 */
+		public int getBaseHitPoints() {
+			return this.baseHitPoints;
+		}
 
-    /**
-     * @return level
-     */
-    public Level getLevel() {
-        return this.level;
-    }
+		/**
+		 * @return baseRndmStrtCoins
+		 */
+		public int getBaseRndmStrtCoins() {
+			return this.baseRndmStrtCoins;
+		}
 
-    /**
-     * @return CoinsBuilder
-     */
-    public CoinsBuilder getRamdomCoins() {
-        DnDClassName dnDClassName = this.getName();
-        CoinsBuilder coinsBuilder = new CoinsBuilder();
-        StringBuilder stringBuilder = new StringBuilder();
-        if (!dnDClassName.equals(DnDClassName.MONK)) {
-            IDice d4 = Dice.getDice(4);
-            IDice rollDice = d4.rollDice(null, dnDClassName.baseRndmStrtCoins, 0);
-            coinsBuilder.setGold(rollDice.getLastValue() * 10);
+		/**
+		 * @return baseSkillPoints
+		 */
+		public int getBaseSkillPoints() {
+			return this.baseSkillPoints;
+		}
 
-            stringBuilder.append("To get a Random Starting Coins: ");
-            stringBuilder.append(rollDice.getStringFromBuilder());
-            stringBuilder.append("\t The result was ");
-            stringBuilder.append(coinsBuilder);
-            stringBuilder.append("gp");
+		/**
+		 * @return classTo
+		 */
+		public Class<?> getClassTo() {
+			return this.classTo;
+		}
 
-        }
-        else {
-            coinsBuilder.setGold(12);
-            coinsBuilder.setSilver(5);
+		/**
+		 * @return baseSaveBonusPoor
+		 */
+		public boolean isBaseSaveBonusPoor() {
+			return baseSaveBonusPoor;
+		}
 
-            stringBuilder.append("To get a Random Starting Coins: ");
-            stringBuilder.append(12);
-            stringBuilder.append("gp and ");
-            stringBuilder.append(5);
-            stringBuilder.append("sp and ");
-        }
-        System.out.println(stringBuilder);
-        return coinsBuilder;
-    }
+	}
 
-    /**
-     * @param skillName
-     * @return this.getClassSkills().contains(skillName)
-     */
-    public boolean isClassSkill(SkillName skillName) {
-        return this.getClassSkills().contains(skillName);
-    }
+	/**
+	 * @author Michael Felipe Rondón Acosta
+	 */
+	public enum Level {
+		/**
+		* 
+		*/
+		FIRST(1),
+		/**
+		 * 
+		 */
+		TWENTY(20);
 
-    /**
-     * 
-     */
-    public void setElement() {
-        super.setElement();
+		private int level;
 
-        this.appendAvailableFeat(1);
+		private Level(int level) {
+			this.level = level;
+		}
 
-        this.updateSkillPoints();
+		/**
+		 * @param array
+		 * @return adjustArray
+		 */
+		private int[] adjustArray(int[] array) {
+			int[] resp = new int[1];
+			for (int i = array.length - 1; i > 0; i--) {
+				if (array[i] > 0) {
+					resp = new int[i + 1];
+					break;
+				}
+			}
+			for (int i = 0; i < resp.length; i++) {
+				resp[i] = array[i];
+			}
+			return resp;
+		}
 
-    }
+		/**
+		 * 
+		 * @return AbilityScoreInreses
+		 */
+		public int getAbilityScoreIncreses(int currentAbilityScoreIncr) {
+			if (this.level % 4 == 0) {
+				currentAbilityScoreIncr += 1;
+			}
+			return currentAbilityScoreIncr;
+		}
 
-    /**
-     * @param level
-     */
-    public void setLevel(Level level) {
-        this.level = level;
-    }
+		/**
+		 * @return BaseAttackBonusGood
+		 */
+		private int[] getBaseAttackBonusAverage() {
+			int[] resp = new int[] { 0, 0, 0, 0 };
+			int addPenalty = (this.getLevel() - 1) >> 2;
+			resp[0] = this.getLevel() - 1 - addPenalty;
+			resp[1] = resp[0] - 5;
+			resp[1] = resp[1] < 0 ? 0 : resp[1];
+			resp[2] = resp[1] - 5;
+			resp[2] = resp[2] < 0 ? 0 : resp[2];
+			return adjustArray(resp);
+		}
 
-    /**
-     * 
-     */
-    public void showClassSkill() {
-        StringBuilder stringBuilder = new StringBuilder();
-        List<SkillName> classSkills = this.getClassSkills();
-        stringBuilder.append("ClassSkills for ");
-        stringBuilder.append(this.getName());
-        stringBuilder.append(":\t");
-        for (SkillName skillName : classSkills) {
-            stringBuilder.append(skillName);
-            stringBuilder.append(',');
-        }
-        stringBuilder.deleteCharAt(stringBuilder.length() - 1);
-        System.out.println(stringBuilder.toString());
-    }
+		/**
+		 * @return BaseAttackBonusGood
+		 */
+		private int[] getBaseAttackBonusGood() {
+			int[] resp = new int[] { 0, 0, 0, 0 };
+			resp[0] = this.getLevel();
+			resp[1] = this.getLevel() - 5;
+			resp[1] = resp[1] < 0 ? 0 : resp[1];
+			resp[2] = this.getLevel() - 10;
+			resp[2] = resp[2] < 0 ? 0 : resp[2];
+			resp[3] = this.getLevel() - 15;
+			resp[3] = resp[3] < 0 ? 0 : resp[3];
+			return adjustArray(resp);
+		}
 
-    /**
-     * @return List<Skill>
-     */
-    protected abstract List<SkillName> getClassSkills();
+		/**
+		 * @return BaseAttackBonusPoor
+		 */
+		private int[] getBaseAttackBonusPoor() {
+			int[] resp = new int[] { 0, 0, 0, 0 };
+			resp[0] = this.getLevel() >> 1;
+			resp[1] = resp[0] - 5;
+			resp[1] = resp[1] < 0 ? 0 : resp[1];
+			return adjustArray(resp);
+		}
 
-    protected String getKeyName() {
-        return KEY_NAME;
-    }
+		/**
+		 * @return BaseSaveBonusGood
+		 */
+		private int getBaseSaveBonusGood() {
+			return (this.getLevel() >> 1) + 2;
+		}
 
-    /**
-     * 
-     */
-    protected void preValidation() {
-        super.preValidation();
-        // Util.getInstance().validIsClassSet(this.descProperties);
+		/**
+		 * @return BaseSaveBonusGood
+		 */
+		private int getBaseSaveBonusPoor() {
+			return this.getLevel() / 3;
+		}
 
-    }
+		/**
+		 * @return level
+		 */
+		public int getLevel() {
+			return level;
+		}
 
-    /**
-     * 
-     */
-    protected void updateSkillPoints() {
-        ACheckeable aCheckeable = this.checkProperties.get(Ability.AbilityName.INTELLIGENCE);
-        int baseSkillPoints = this.getName().getBaseSkillPoints();
-        int skillPointsToAdd = (aCheckeable.getModifier() + baseSkillPoints);
+		/**
+		 * @return maxClassSkillPoints
+		 */
+		public int getMaxClassSkillRanks() {
+			return this.getLevel() + 3;
+		}
 
-        if (this.level.equals(Level.FIRST)) {
-            skillPointsToAdd = (skillPointsToAdd * 4);
-        }
-        Integer skillPoints = (Integer) this.descProperties.get(Skill.SKILL_POINTS);
-        skillPoints += skillPointsToAdd;
-        this.descProperties.put(Skill.SKILL_POINTS, skillPoints);
-    }
+		/**
+		 * @return maxNOClassSkillPoints
+		 */
+		public BigDecimal getMaxNOClassSkillRanks() {
+			return (new BigDecimal(getMaxClassSkillRanks())).divide(new BigDecimal(2));
+		}
 
-    /**
-     * @return baseSavingThrow
-     */
-    public int getBaseSavingThrow() {
-        int resp;
-        if (this.getName().isBaseSaveBonusPoor()) {
-            resp = this.getLevel().getBaseSaveBonusPoor();
-        }
-        else {
-            resp = this.getLevel().getBaseSaveBonusGood();
-        }
-        return resp;
-    }
+		/**
+		 * @return RequiredXP
+		 */
+		public int getNextRequiredXP() {
+			return getRequiredXP(this.level + 1);
+		}
 
-    /**
-     * @return BaseAttackBonus
-     */
-    public int[] getBaseAttackBonus() {
-        int[] resp;
-        if (this.getName().getBaseAttackBonusType().equals(
-                AttackBonusTypes.POOR)) {
-            resp = this.getLevel().getBaseAttackBonusPoor();
-        }
-        else if (this.getName().getBaseAttackBonusType().equals(
-                AttackBonusTypes.AVERAGE)) {
-            resp = this.getLevel().getBaseAttackBonusAverage();
-        }
-        else {
-            resp = this.getLevel().getBaseAttackBonusGood();
-        }
-        return resp;
-    }
+		/**
+		 * @return RequiredXP
+		 */
+		public int getRequiredXP() {
+			return getRequiredXP(this.level);
+		}
 
-    /**
-     * @author Michael Felipe Rondón Acosta
-     */
-    public enum AttackBonusTypes {
-        /**
-         * 
-         */
-        POOR,
-        /**
-         * 
-         */
-        AVERAGE,
-        /**
-         * 
-         */
-        GOOD;
-    }
+		private int getRequiredXP(int level) {
+			int resp;
+			if (level == 0) {
+				resp = 0;
+			} else {
+				resp = (level - 1) * 1000 + getRequiredXP(level - 1);
+			}
+			return resp;
+		}
 
-    /**
-     * @author Michael Felipe Rondón Acosta
-     */
-    public enum DnDClassName {
-        /**
-         * 
-         */
-        DRUID(4, Druid.class, 2, 8, AttackBonusTypes.AVERAGE, true),
-        /**
-         * 
-         */
-        MONK(4, Monk.class, -1, 8, AttackBonusTypes.AVERAGE, true);
+	}
 
-        private int              baseSkillPoints;
-        private Class<?>         classTo;
-        private int              baseRndmStrtCoins;
-        private int              baseHitPoints;
-        private AttackBonusTypes baseAttackBonusType;
-        private boolean          baseSaveBonusPoor;
+	/**
+	 * 
+	 */
+	public static final String KEY_NAME = "DnDClass";
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
-        private DnDClassName(int baseSkillPoints, Class<?> classTo,
-                int baseRndmStrtCoins, int baseHitPoints,
-                AttackBonusTypes baseAttackBonusType, boolean baseSaveBonusPoor) {
-            this.baseSkillPoints = baseSkillPoints;
-            this.classTo = classTo;
-            this.baseRndmStrtCoins = baseRndmStrtCoins;
-            this.baseHitPoints = baseHitPoints;
-            this.baseAttackBonusType = baseAttackBonusType;
-            this.baseSaveBonusPoor = baseSaveBonusPoor;
-        }
+	private Level level = Level.FIRST;
 
-        /**
-         * @return baseSaveBonusPoor
-         */
-        public boolean isBaseSaveBonusPoor() {
-            return baseSaveBonusPoor;
-        }
+	private int xPPoints = 0;
 
-        /**
-         * @return baseAttackBonus
-         */
-        public AttackBonusTypes getBaseAttackBonusType() {
-            return this.baseAttackBonusType;
-        }
+	/**
+	 * @param dnDClassName
+	 * @param checkProperties
+	 * @param descProperties
+	 */
+	public ADnDClass(DnDClassName dnDClassName, HashMap<Enum<?>, ACheckeable> checkProperties,
+			HashMap<String, Object> descProperties) {
+		super(dnDClassName, checkProperties, descProperties);
+	}
 
-        /**
-         * @return baseHitPoints
-         */
-        public int getBaseHitPoints() {
-            return this.baseHitPoints;
-        }
+	public void addXPPoints(int xpToAdd) {
+		xPPoints += xpToAdd;
+		if (xPPoints >= this.getLevel().getNextRequiredXP()) {
+			//TODO
+			System.out.println("New level");
+		}
+	}
 
-        /**
-         * @return baseRndmStrtCoins
-         */
-        public int getBaseRndmStrtCoins() {
-            return this.baseRndmStrtCoins;
-        }
+	/**
+	 * @return BaseAttackBonus
+	 */
+	public int[] getBaseAttackBonus() {
+		int[] resp;
+		if (this.getName().getBaseAttackBonusType().equals(AttackBonusTypes.POOR)) {
+			resp = this.getLevel().getBaseAttackBonusPoor();
+		} else if (this.getName().getBaseAttackBonusType().equals(AttackBonusTypes.AVERAGE)) {
+			resp = this.getLevel().getBaseAttackBonusAverage();
+		} else {
+			resp = this.getLevel().getBaseAttackBonusGood();
+		}
+		return resp;
+	}
 
-        /**
-         * @return baseSkillPoints
-         */
-        public int getBaseSkillPoints() {
-            return this.baseSkillPoints;
-        }
+	/**
+	 * @return baseSavingThrow
+	 */
+	public int getBaseSavingThrow() {
+		int resp;
+		if (this.getName().isBaseSaveBonusPoor()) {
+			resp = this.getLevel().getBaseSaveBonusPoor();
+		} else {
+			resp = this.getLevel().getBaseSaveBonusGood();
+		}
+		return resp;
+	}
 
-        /**
-         * @return classTo
-         */
-        public Class<?> getClassTo() {
-            return this.classTo;
-        }
+	/**
+	 * @return List<Skill>
+	 */
+	protected abstract List<SkillName> getClassSkills();
 
-    }
+	@Override
+	protected String getKeyName() {
+		return KEY_NAME;
+	}
 
-    /**
-     * @author Michael Felipe Rondón Acosta
-     */
-    public enum Level {
-        /**
-        * 
-        */
-        FIRST(1),
-        /**
-         * 
-         */
-        TWENTY(20);
+	/**
+	 * @return level
+	 */
+	public Level getLevel() {
+		return this.level;
+	}
 
-        private int level;
+	/**
+	 * @return CoinsBuilder
+	 */
+	public CoinsBuilder getRamdomCoins() {
+		DnDClassName dnDClassName = this.getName();
+		CoinsBuilder coinsBuilder = new CoinsBuilder();
+		StringBuilder stringBuilder = new StringBuilder();
+		if (!dnDClassName.equals(DnDClassName.MONK)) {
+			IDice d4 = Dice.getDice(4);
+			IDice rollDice = d4.rollDice(null, dnDClassName.baseRndmStrtCoins, 0);
+			coinsBuilder.setGold(rollDice.getLastValue() * 10);
 
-        private Level(int level) {
-            this.level = level;
-        }
+			stringBuilder.append("To get a Random Starting Coins: ");
+			stringBuilder.append(rollDice.getStringFromBuilder());
+			stringBuilder.append("\t The result was ");
+			stringBuilder.append(coinsBuilder);
+			stringBuilder.append("gp");
 
-        /**
-         * @return RequiredXP
-         */
-        public int getRequiredXP() {
-            return getRequiredXP(this.level);
-        }
+		} else {
+			coinsBuilder.setGold(12);
+			coinsBuilder.setSilver(5);
 
-        private int getRequiredXP(int level) {
-            int resp;
-            if (level == 0) {
-                resp = 0;
-            }
-            else {
-                resp = (level - 1) * 1000 + getRequiredXP(level - 1);
-            }
-            return resp;
-        }
+			stringBuilder.append("To get a Random Starting Coins: ");
+			stringBuilder.append(12);
+			stringBuilder.append("gp and ");
+			stringBuilder.append(5);
+			stringBuilder.append("sp and ");
+		}
+		System.out.println(stringBuilder);
+		return coinsBuilder;
+	}
 
-        /**
-         * @return level
-         */
-        public int getLevel() {
-            return level;
-        }
+	public int getXPPoints() {
+		return xPPoints;
+	}
 
-        /**
-         * @return maxClassSkillPoints
-         */
-        public int getMaxClassSkillRanks() {
-            return this.getLevel()+3;
-        }
+	/**
+	 * @param skillName
+	 * @return this.getClassSkills().contains(skillName)
+	 */
+	public boolean isClassSkill(SkillName skillName) {
+		return this.getClassSkills().contains(skillName);
+	}
 
-        /**
-         * @return maxNOClassSkillPoints
-         */
-        public BigDecimal getMaxNOClassSkillRanks() {
-            return (new BigDecimal(getMaxClassSkillRanks())).divide(new BigDecimal(2));
-        }
+	/**
+	 * 
+	 */
+	@Override
+	protected void preValidation() {
+		super.preValidation();
+		// Util.getInstance().validIsClassSet(this.descProperties);
 
-        /**
-         * @return BaseSaveBonusGood
-         */
-        private int getBaseSaveBonusGood() {
-            return (this.getLevel() >> 1) + 2;
-        }
+	}
 
-        /**
-         * @return BaseSaveBonusGood
-         */
-        private int getBaseSaveBonusPoor() {
-            return this.getLevel() / 3;
-        }
+	/**
+	 * 
+	 */
+	@Override
+	public void setElement() {
+		super.setElement();
 
-        /**
-         * @return BaseAttackBonusGood
-         */
-        private int[] getBaseAttackBonusGood() {
-            int[] resp = new int[] { 0, 0, 0, 0 };
-            resp[0] = this.getLevel();
-            resp[1] = this.getLevel() - 5;
-            resp[1] = resp[1] < 0 ? 0 : resp[1];
-            resp[2] = this.getLevel() - 10;
-            resp[2] = resp[2] < 0 ? 0 : resp[2];
-            resp[3] = this.getLevel() - 15;
-            resp[3] = resp[3] < 0 ? 0 : resp[3];
-            return adjustArray(resp);
-        }
+		this.appendAvailableFeat(1);
 
-        /**
-         * @return BaseAttackBonusGood
-         */
-        private int[] getBaseAttackBonusAverage() {
-            int[] resp = new int[] { 0, 0, 0, 0 };
-            int addPenalty = (this.getLevel() - 1) >> 2;
-            resp[0] = this.getLevel() - 1 - addPenalty;
-            resp[1] = resp[0] - 5;
-            resp[1] = resp[1] < 0 ? 0 : resp[1];
-            resp[2] = resp[1] - 5;
-            resp[2] = resp[2] < 0 ? 0 : resp[2];
-            return adjustArray(resp);
-        }
+		this.updateSkillPoints();
 
-        /**
-         * @return BaseAttackBonusPoor
-         */
-        private int[] getBaseAttackBonusPoor() {
-            int[] resp = new int[] { 0, 0, 0, 0 };
-            resp[0] = this.getLevel() >> 1;
-            resp[1] = resp[0] - 5;
-            resp[1] = resp[1] < 0 ? 0 : resp[1];
-            return adjustArray(resp);
-        }
+	}
 
-        /**
-         * @param array
-         * @return adjustArray
-         */
-        private int[] adjustArray(int[] array) {
-            int[] resp = new int[1];
-            for (int i = array.length - 1; i > 0; i--) {
-                if (array[i] > 0) {
-                    resp = new int[i + 1];
-                    break;
-                }
-            }
-            for (int i =0; i< resp.length;i++) {
-                resp[i]=array[i];
-            }
-            return resp;
-        }
+	/**
+	 * @param level
+	 */
+	public void setLevel(Level level) {
+		this.level = level;
+	}
 
-    }
+	/**
+	 * 
+	 */
+	public void showClassSkill() {
+		StringBuilder stringBuilder = new StringBuilder();
+		List<SkillName> classSkills = this.getClassSkills();
+		stringBuilder.append("ClassSkills for ");
+		stringBuilder.append(this.getName());
+		stringBuilder.append(":\t");
+		for (SkillName skillName : classSkills) {
+			stringBuilder.append(skillName);
+			stringBuilder.append(',');
+		}
+		stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+		System.out.println(stringBuilder.toString());
+	}
+
+	@Override
+	public String toString() {
+
+		return DnDUtil.getInstance().simpleConcat(super.toString(), " Level:", this.getLevel().level, " (",
+				this.getXPPoints(), "/", this.getLevel().getNextRequiredXP(), ")");
+	}
+
+	/**
+	 * 
+	 */
+	protected void updateSkillPoints() {
+		ACheckeable aCheckeable = this.checkProperties.get(Ability.AbilityName.INTELLIGENCE);
+		int baseSkillPoints = this.getName().getBaseSkillPoints();
+		int skillPointsToAdd = (aCheckeable.getModifier() + baseSkillPoints);
+
+		if (this.level.equals(Level.FIRST)) {
+			skillPointsToAdd = (skillPointsToAdd * 4);
+		}
+		Integer skillPoints = (Integer) this.descProperties.get(Skill.SKILL_POINTS);
+		skillPoints += skillPointsToAdd;
+		this.descProperties.put(Skill.SKILL_POINTS, skillPoints);
+	}
 
 }

@@ -10,88 +10,86 @@ import com.mfra.dnd.dndclass.ADnDClass;
  */
 public class SavingThrows extends ACheckeable implements Serializable {
 
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 2L;
+	/**
+	 * 
+	 */
+	public enum SavingThrowName {
+		/**
+		 * 
+		 */
+		FORTITUDE(Ability.AbilityName.CONSTITUTION),
+		/**
+		 * 
+		 */
+		REFLEX(Ability.AbilityName.DEXTERITY),
+		/**
+		 * 
+		 */
+		WILL(Ability.AbilityName.WISDOM);
 
-    private HashMap<String, Object> descProperties;
+		private Ability.AbilityName abilityName;
 
-    /**
-     * @param name
-     * @param checkProperties
-     * @param descProperties
-     */
-    public SavingThrows(SavingThrows.SavingThrowName name,
-            HashMap<Enum<?>, ACheckeable> checkProperties,
-            HashMap<String, Object> descProperties) {
-        super(name, checkProperties, name.getAbilityName());
-        this.descProperties = descProperties;
-    }
-    
-    /**
-     * @return getBaseAttack
-     */
-    private int getBaseSavingThrow() {
-        return ((ADnDClass) this.descProperties.get(ADnDClass.KEY_NAME)).getBaseSavingThrow();
-    }
+		private SavingThrowName(AbilityName abilityName) {
+			this.abilityName = abilityName;
+		}
 
-    @Override
-    public String getHeader() {
-        return "Name\tBaseSavingThrow\tAbilityModifier\tTotalModifier";
-    }
+		/**
+		 * @return abilityName
+		 */
+		public Ability.AbilityName getAbilityName() {
+			return this.abilityName;
+		}
 
-    @Override
-    public int getModifier() {
-        return this.getAbilityModifier() + this.getBaseSavingThrow();
-    }
+	}
 
-    @Override
-    public String toString() {
-        String line = String.format(this.getFormat(), this.getName(),
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2L;
 
-        this.getBaseSavingThrow(), this.getAbilityModifier(),
-                this.getModifier());
-        return line;
-    }
+	private HashMap<String, Object> descProperties;
 
-    @Override
-    protected String getFormat() {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("%s\t%d\t%d\t%d");
-        stringBuilder.append(System.getProperty("line.separator"));
-        return stringBuilder.toString();
-    }
+	/**
+	 * @param name
+	 * @param checkProperties
+	 * @param descProperties
+	 */
+	public SavingThrows(SavingThrows.SavingThrowName name, HashMap<Enum<?>, ACheckeable> checkProperties,
+			HashMap<String, Object> descProperties) {
+		super(name, checkProperties, name.getAbilityName());
+		this.descProperties = descProperties;
+	}
 
-    /**
-     * 
-     */
-    public enum SavingThrowName {
-        /**
-         * 
-         */
-        FORTITUDE(Ability.AbilityName.CONSTITUTION),
-        /**
-         * 
-         */
-        REFLEX(Ability.AbilityName.DEXTERITY),
-        /**
-         * 
-         */
-        WILL(Ability.AbilityName.WISDOM);
+	/**
+	 * @return getBaseAttack
+	 */
+	private int getBaseSavingThrow() {
+		return ((ADnDClass) this.descProperties.get(ADnDClass.KEY_NAME)).getBaseSavingThrow();
+	}
 
-        private Ability.AbilityName abilityName;
+	@Override
+	protected String getFormat() {
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append("%s\t%d\t%d\t%d");
+		stringBuilder.append(System.getProperty("line.separator"));
+		return stringBuilder.toString();
+	}
 
-        private SavingThrowName(AbilityName abilityName) {
-            this.abilityName = abilityName;
-        }
+	@Override
+	public String getHeader() {
+		return "Name\tBaseSavingThrow\tAbilityModifier\tTotalModifier";
+	}
 
-        /**
-         * @return abilityName
-         */
-        public Ability.AbilityName getAbilityName() {
-            return this.abilityName;
-        }
+	@Override
+	public int getModifier() {
+		return this.getAbilityModifier() + this.getBaseSavingThrow();
+	}
 
-    }
+	@Override
+	public String toString() {
+		String line = String.format(this.getFormat(), this.getName(),
+
+				this.getBaseSavingThrow(), this.getAbilityModifier(), this.getModifier());
+		return line;
+	}
 }

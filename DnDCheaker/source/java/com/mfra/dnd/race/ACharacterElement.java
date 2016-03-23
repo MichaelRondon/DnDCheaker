@@ -11,84 +11,81 @@ import com.mfra.exceptions.GeneralException;
  * @author Michael Felipe Rondón Acosta
  * @param <K>
  */
-public abstract class ACharacterElement<K extends Enum<?>> implements
-        Serializable {
+public abstract class ACharacterElement<K extends Enum<?>> implements Serializable {
 
-    /**
-     * 
-     */
-    private static final long                     serialVersionUID = 1L;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
-    /**
-     * 
-     */
-    protected final HashMap<Enum<?>, ACheckeable> checkProperties;
-    /**
-     * 
-     */
-    protected final HashMap<String, Object>       descProperties;
-    /**
-     * 
-     */
-    private K                                     nameElement;
+	/**
+	 * 
+	 */
+	protected final HashMap<Enum<?>, ACheckeable> checkProperties;
+	/**
+	 * 
+	 */
+	protected final HashMap<String, Object> descProperties;
+	/**
+	 * 
+	 */
+	private K nameElement;
 
-    /**
-     * @param nameElement
-     * @param checkProperties
-     * @param descProperties
-     */
-    public ACharacterElement(K nameElement,
-            HashMap<Enum<?>, ACheckeable> checkProperties,
-            HashMap<String, Object> descProperties) {
-        this.nameElement = nameElement;
-        this.checkProperties = checkProperties;
-        this.descProperties = descProperties;
-    }
+	/**
+	 * @param nameElement
+	 * @param checkProperties
+	 * @param descProperties
+	 */
+	public ACharacterElement(K nameElement, HashMap<Enum<?>, ACheckeable> checkProperties,
+			HashMap<String, Object> descProperties) {
+		this.nameElement = nameElement;
+		this.checkProperties = checkProperties;
+		this.descProperties = descProperties;
+	}
 
-    /**
-     * @return nameElement
-     */
-    public K getName() {
-        return this.nameElement;
-    }
+	/**
+	 * @param availableFeat
+	 */
+	protected void appendAvailableFeat(int availableFeat) {
+		Integer availableFeats = 0;
+		if (this.descProperties.get(AFeat.AVAILABLE_FEATS_KEY_NAME) != null) {
+			availableFeats = (Integer) this.descProperties.get(AFeat.AVAILABLE_FEATS_KEY_NAME);
+		}
+		this.descProperties.put(AFeat.AVAILABLE_FEATS_KEY_NAME, availableFeats + availableFeat);
+	}
 
-    /**
-     * 
-     */
-    public void setElement() {
-        this.preValidation();
-        this.descProperties.put(this.getKeyName(), this);
-    }
+	/**
+	 * @return keyName
+	 */
+	protected abstract String getKeyName();
 
-    public String toString() {
-        return this.getName().toString();
-    }
+	/**
+	 * @return nameElement
+	 */
+	public K getName() {
+		return this.nameElement;
+	}
 
-    /**
-     * @param availableFeat
-     */
-    protected void appendAvailableFeat(int availableFeat) {
-        Integer availableFeats = 0;
-        if (this.descProperties.get(AFeat.AVAILABLE_FEATS_KEY_NAME) != null) {
-            availableFeats = (Integer) this.descProperties.get(AFeat.AVAILABLE_FEATS_KEY_NAME);
-        }
-        this.descProperties.put(AFeat.AVAILABLE_FEATS_KEY_NAME, availableFeats
-                + availableFeat);
-    }
+	/**
+	 * 
+	 */
+	protected void preValidation() {
+		if (this.descProperties.containsKey(this.getKeyName())) {
+			throw new GeneralException("You has a " + this.getKeyName() + " Yet");
+		}
+		DnDUtil.getInstance().validAreAbilitiesSet(this.checkProperties);
+	}
 
-    /**
-     * @return keyName
-     */
-    protected abstract String getKeyName();
+	/**
+	 * 
+	 */
+	public void setElement() {
+		this.preValidation();
+		this.descProperties.put(this.getKeyName(), this);
+	}
 
-    /**
-     * 
-     */
-    protected void preValidation() {
-        if (this.descProperties.containsKey(this.getKeyName())) {
-            throw new GeneralException("You has a " + this.getKeyName()
-                    + " Yet");
-        }
-        DnDUtil.getInstance().validAreAbilitiesSet(this.checkProperties);
-    }
+	@Override
+	public String toString() {
+		return this.getName().toString();
+	}
 }

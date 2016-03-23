@@ -10,117 +10,115 @@ import com.mfra.dnd.util.DnDUtil;
  */
 public class AttackBonus extends ACheckeable {
 
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 3L;
+	/**
+	 * 
+	 */
+	public enum AttackName {
+		/**
+		 * 
+		 */
+		MELEE_ATTACK(Ability.AbilityName.STRENGTH),
+		/**
+		 * 
+		 */
+		RANGED_ATTACK(Ability.AbilityName.DEXTERITY);
 
-    private HashMap<String, Object> descProperties;
+		private Ability.AbilityName abilityName;
 
-    /**
-     * @param name
-     * @param checkProperties
-     * @param descProperties
-     */
-    public AttackBonus(AttackBonus.AttackName name,
-            HashMap<Enum<?>, ACheckeable> checkProperties,
-            HashMap<String, Object> descProperties) {
-        super(name, checkProperties, name.getAbilityName());
-        this.descProperties = descProperties;
-    }
+		private AttackName(AbilityName abilityName) {
+			this.abilityName = abilityName;
+		}
 
-    /**
-     * @return getBaseAttack
-     */
-    private int[] getBaseAttack() {
-        return ((ADnDClass) this.descProperties.get(ADnDClass.KEY_NAME)).getBaseAttackBonus();
-    }
+		/**
+		 * @return abilityName
+		 */
+		public Ability.AbilityName getAbilityName() {
+			return this.abilityName;
+		}
 
-    @Override
-    public String getHeader() {
-        return "Name\t\tBaseAttack\tAbilityModifier\tTotalModifier";
-    }
+	}
 
-    @Override
-    public int getModifier() {
-        return 0;
-    }
-    
-    /**
-     * 
-     * @return AttModifier
-     */
-    public int[] getAttModifier() {
-        int[] resp = new int[getBaseAttack().length];
-        int counter=0;
-        for (Integer baseAttack : getBaseAttack()) {
-            resp[counter]=this.getAbilityModifier() +baseAttack;
-            counter++;
-        }
-        return resp;
-    }
-    
-    
-    private int[] lastChecks; 
-    /**
-     * 
-     */
-    public void check(String characterName, Integer difficultyClass, int aditionalModifier) {
-        int counter=0;
-        lastChecks = new int[getAttModifier().length];
-        StringBuilder stringBuilder = new StringBuilder();
-        for(Integer modifier :getAttModifier()){
-            super.check(characterName, difficultyClass, modifier);
-            lastChecks[counter]=getLastCheck();
-            stringBuilder.append(super.stringBuilder.toString());
-        }
-        super.stringBuilder=stringBuilder;
-    }
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3L;
 
-    @Override
-    public String toString() {
-        String line = String.format(this.getFormat(), this.getName(),
+	private HashMap<String, Object> descProperties;
 
-                DnDUtil.getInstance().intArrayToString(this.getBaseAttack()), 
-                this.getAbilityModifier(), 
-                DnDUtil.getInstance().intArrayToString(this.getAttModifier()));
-        return line;
-    }
-    
+	private int[] lastChecks;
 
-    @Override
-    protected String getFormat() {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("%-13s\t%-6s\t\t%-2d\t\t%-6s");
-        stringBuilder.append(System.getProperty("line.separator"));
-        return stringBuilder.toString();
-    }
+	/**
+	 * @param name
+	 * @param checkProperties
+	 * @param descProperties
+	 */
+	public AttackBonus(AttackBonus.AttackName name, HashMap<Enum<?>, ACheckeable> checkProperties,
+			HashMap<String, Object> descProperties) {
+		super(name, checkProperties, name.getAbilityName());
+		this.descProperties = descProperties;
+	}
 
-    /**
-     * 
-     */
-    public enum AttackName {
-        /**
-         * 
-         */
-        MELEE_ATTACK(Ability.AbilityName.STRENGTH),
-        /**
-         * 
-         */
-        RANGED_ATTACK(Ability.AbilityName.DEXTERITY);
+	/**
+	 * 
+	 */
+	@Override
+	public void check(String characterName, Integer difficultyClass, int aditionalModifier) {
+		int counter = 0;
+		lastChecks = new int[getAttModifier().length];
+		StringBuilder stringBuilder = new StringBuilder();
+		for (Integer modifier : getAttModifier()) {
+			super.check(characterName, difficultyClass, modifier);
+			lastChecks[counter] = getLastCheck();
+			stringBuilder.append(super.stringBuilder.toString());
+		}
+		super.stringBuilder = stringBuilder;
+	}
 
-        private Ability.AbilityName abilityName;
+	/**
+	 * 
+	 * @return AttModifier
+	 */
+	public int[] getAttModifier() {
+		int[] resp = new int[getBaseAttack().length];
+		int counter = 0;
+		for (Integer baseAttack : getBaseAttack()) {
+			resp[counter] = this.getAbilityModifier() + baseAttack;
+			counter++;
+		}
+		return resp;
+	}
 
-        private AttackName(AbilityName abilityName) {
-            this.abilityName = abilityName;
-        }
+	/**
+	 * @return getBaseAttack
+	 */
+	private int[] getBaseAttack() {
+		return ((ADnDClass) this.descProperties.get(ADnDClass.KEY_NAME)).getBaseAttackBonus();
+	}
 
-        /**
-         * @return abilityName
-         */
-        public Ability.AbilityName getAbilityName() {
-            return this.abilityName;
-        }
+	@Override
+	protected String getFormat() {
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append("%-13s\t%-6s\t\t%-2d\t\t%-6s");
+		stringBuilder.append(System.getProperty("line.separator"));
+		return stringBuilder.toString();
+	}
 
-    }
+	@Override
+	public String getHeader() {
+		return "Name\t\tBaseAttack\tAbilityModifier\tTotalModifier";
+	}
+
+	@Override
+	public int getModifier() {
+		return 0;
+	}
+
+	@Override
+	public String toString() {
+		String line = String.format(this.getFormat(), this.getName(),
+
+				DnDUtil.getInstance().intArrayToString(this.getBaseAttack()), this.getAbilityModifier(),
+				DnDUtil.getInstance().intArrayToString(this.getAttModifier()));
+		return line;
+	}
 }

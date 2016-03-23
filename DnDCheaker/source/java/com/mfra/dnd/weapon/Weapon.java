@@ -5,13 +5,13 @@ package com.mfra.dnd.weapon;
  */
 public class Weapon {
 
-    private WeaponName name;
+	private WeaponName name;
 
-    /**
-     * @return name
-     */
-    public WeaponName getName() {
-        return this.name;
-    }
+	/**
+	 * @return name
+	 */
+	public WeaponName getName() {
+		return this.name;
+	}
 
 }
