@@ -11,132 +11,131 @@ import com.mfra.dnd.util.DnDUtil;
 /**
  * @author Michael Felipe Rondón Acosta
  */
-public abstract class ARace extends ACharacterElement<ARace.RaceName> implements
-        IRacesClases {
+public abstract class ARace extends ACharacterElement<ARace.RaceName> implements IRacesClases {
 
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
-    
-    /**
-     * 
-     */
-    protected final SkillManager skillManager; 
+	/**
+	 * @author Michael Felipe Rondón Acosta
+	 */
+	public enum RaceName {
+		/**
+		* 
+		*/
+		ELF(Elf.class, 0, DnDUtil.getInstance().feetToMeters(30)),
+		/**
+		 * 
+		 */
+		HALF_ORC(HalfOrc.class, 0, DnDUtil.getInstance().feetToMeters(30)),
+		/**
+		 * 
+		 */
+		HUMAN(Human.class, 0, DnDUtil.getInstance().feetToMeters(30));
 
-    /**
-     * 
-     */
-    public static final String SPECIALS_RACE_KEY = "SPECCIALS_RACE";
+		private BigDecimal baseLandSpeed;
+		private Class<?> classTo;
+		private int sizeModifier;
 
-    /**
-     * 
-     */
-    public static final String KEY_NAME          = "RACE";
+		/**
+		 * @param classTo
+		 */
+		private RaceName(Class<?> classTo, int sizeModifier, BigDecimal baseLandSpeed) {
+			this.classTo = classTo;
+			this.baseLandSpeed = baseLandSpeed;
+		}
 
-    /**
-     * @param raceName
-     * @param checkProperties
-     * @param descProperties
-     */
-    public ARace(RaceName raceName,
-            HashMap<Enum<?>, ACheckeable> checkProperties,
-            HashMap<String, Object> descProperties) {
-        super(raceName, checkProperties, descProperties);
-        skillManager = new SkillManager(checkProperties);
-    }
+		/**
+		 * @return baseLandSpeed
+		 */
+		public BigDecimal getBaseLandSpeed() {
+			return this.baseLandSpeed;
+		}
 
-    public String getKeyName() {
-        return KEY_NAME;
-    }
+		/**
+		 * @return class_
+		 */
+		public Class<?> getClassTo() {
+			return this.classTo;
+		}
 
-    /**
-     * @return SetOfLenguages
-     */
-    public abstract Set<Language> getSetOfAutoLenguages();
+		/**
+		 * @return sizeModifier
+		 */
+		public int getSizeModifier() {
+			return this.sizeModifier;
+		}
 
-    /**
-     * 
-     */
-    public void setElement() {
-        super.setElement();
-        this.updateAbilities();
-        this.updateSkillPoints();
-        this.updateFeats();
-    }
+	}
 
-    /**
-     * @param specialsSet
-     */
-    protected void setSpecials(Set<String> specialsSet) {
-        this.descProperties.put(SPECIALS_RACE_KEY, specialsSet);
-    }
+	/**
+	 * 
+	 */
+	public static final String KEY_NAME = "RACE";
 
-    /**
-     * 
-     */
-    protected abstract void updateAbilities();
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
-    /**
-     * 
-     */
-    protected abstract void updateFeats();
+	/**
+	 * 
+	 */
+	public static final String SPECIALS_RACE_KEY = "SPECCIALS_RACE";
 
-    /**
-     * 
-     */
-    protected abstract void updateSkillPoints();
+	/**
+	 * 
+	 */
+	protected final SkillManager skillManager;
 
-    /**
-     * @author Michael Felipe Rondón Acosta
-     */
-    public enum RaceName {
-        /**
-        * 
-        */
-        ELF(Elf.class, 0, DnDUtil.getInstance().feetToMeters(30)),
-        /**
-         * 
-         */
-        HUMAN(Human.class, 0, DnDUtil.getInstance().feetToMeters(30)),
-        /**
-         * 
-         */
-        HALF_ORC(HalfOrc.class, 0, DnDUtil.getInstance().feetToMeters(30));
+	/**
+	 * @param raceName
+	 * @param checkProperties
+	 * @param descProperties
+	 */
+	public ARace(RaceName raceName, HashMap<Enum<?>, ACheckeable> checkProperties,
+			HashMap<String, Object> descProperties) {
+		super(raceName, checkProperties, descProperties);
+		skillManager = new SkillManager(iBasicData);
+	}
 
-        private Class<?>   classTo;
-        private int        sizeModifier;
-        private BigDecimal baseLandSpeed;
+	@Override
+	public String getKeyName() {
+		return KEY_NAME;
+	}
 
-        /**
-         * @param classTo
-         */
-        private RaceName(Class<?> classTo, int sizeModifier,
-                BigDecimal baseLandSpeed) {
-            this.classTo = classTo;
-            this.baseLandSpeed = baseLandSpeed;
-        }
+	/**
+	 * @return SetOfLenguages
+	 */
+	public abstract Set<Language> getSetOfAutoLenguages();
 
-        /**
-         * @return baseLandSpeed
-         */
-        public BigDecimal getBaseLandSpeed() {
-            return this.baseLandSpeed;
-        }
+	/**
+	 * 
+	 */
+	@Override
+	public void setElement() {
+		super.setElement();
+		this.updateAbilities();
+		this.updateSkillPoints();
+		this.updateFeats();
+	}
 
-        /**
-         * @return class_
-         */
-        public Class<?> getClassTo() {
-            return this.classTo;
-        }
+	/**
+	 * @param specialsSet
+	 */
+	protected void setSpecials(Set<String> specialsSet) {
+		this.iBasicData.putDescProperty(SPECIALS_RACE_KEY, specialsSet);
+	}
 
-        /**
-         * @return sizeModifier
-         */
-        public int getSizeModifier() {
-            return this.sizeModifier;
-        }
+	/**
+	 * 
+	 */
+	protected abstract void updateAbilities();
 
-    }
+	/**
+	 * 
+	 */
+	protected abstract void updateFeats();
+
+	/**
+	 * 
+	 */
+	protected abstract void updateSkillPoints();
 }

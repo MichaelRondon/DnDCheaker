@@ -1,48 +1,48 @@
 package com.mfra.dnd.checker;
 
 import java.io.Serializable;
-import java.util.HashMap;
 import com.mfra.dice.StringBuilderWriter;
+import com.mfra.dnd.util.IBasicData;
 
 /**
  * @author Michael Felipe Rondón Acosta
  */
-public class AbilityWorker extends StringBuilderWriter implements
-        IAbilityWorker,Serializable {
+public class AbilityWorker extends StringBuilderWriter implements IAbilityWorker, Serializable {
 
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
-    /**
-     * 
-     */
-    protected HashMap<Enum<?>, ACheckeable> checkProperties = new HashMap<Enum<?>, ACheckeable>();
+	private Ability.AbilityName abilityName;
 
-    private Ability.AbilityName             abilityName;
+	/**
+	 * 
+	 */
+	protected IBasicData iBasicData;
 
-    /**
-     * @param checkProperties
-     * @param abilityName
-     */
-    public AbilityWorker(HashMap<Enum<?>, ACheckeable> checkProperties,
-            Ability.AbilityName abilityName) {
-        this.checkProperties = checkProperties;
-        this.abilityName = abilityName;
-    }
+	/**
+	 * @param checkProperties
+	 * @param abilityName
+	 */
+	public AbilityWorker(IBasicData iBasicData, Ability.AbilityName abilityName) {
+		this.iBasicData = iBasicData;
+		this.abilityName = abilityName;
+	}
 
-    /**
-     * @return AbilityModifier
-     */
-    public int getAbilityModifier() {
-        return ((Ability) this.checkProperties.get(this.getAbilityName())).getModifier();
-    }
+	/**
+	 * @return AbilityModifier
+	 */
+	@Override
+	public int getAbilityModifier() {
+		return ((Ability) this.iBasicData.getCheckProperty(this.getAbilityName())).getModifier();
+	}
 
-    /**
-     * @return getAbilityName()
-     */
-    public Ability.AbilityName getAbilityName() {
-        return this.abilityName;
-    }
+	/**
+	 * @return getAbilityName()
+	 */
+	@Override
+	public Ability.AbilityName getAbilityName() {
+		return this.abilityName;
+	}
 }
