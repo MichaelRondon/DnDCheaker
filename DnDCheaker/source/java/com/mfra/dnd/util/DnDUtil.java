@@ -157,7 +157,6 @@ public class DnDUtil extends StringBuilderWriter {
 	 *            Texto a concatenar.
 	 * @return Concatena dos textos.
 	 */
-	@Deprecated
 	public String simpleConcat(Object... args) {
 		StringBuilder stringBuilder = new StringBuilder();
 		for (Object object : args) {
