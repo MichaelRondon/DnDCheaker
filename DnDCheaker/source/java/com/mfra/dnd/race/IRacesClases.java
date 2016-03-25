@@ -1,6 +1,7 @@
 package com.mfra.dnd.race;
 
 import java.util.Set;
+
 import com.mfra.dnd.language.Language;
 
 /**
@@ -8,8 +9,8 @@ import com.mfra.dnd.language.Language;
  */
 public interface IRacesClases {
 
-	/**
-	 * @return SetOfLenguages
-	 */
-	public abstract Set<Language> getSetOfBonusLenguages();
+    /**
+     * @return SetOfLenguages
+     */
+    public abstract Set<Language> getSetOfBonusLenguages();
 }

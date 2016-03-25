@@ -1,6 +1,7 @@
 package com.mfra.dnd.checker;
 
 import java.io.Serializable;
+
 import com.mfra.dnd.checker.Ability.AbilityName;
 import com.mfra.dnd.dndclass.ADnDClass;
 import com.mfra.dnd.util.IBasicData;
@@ -10,82 +11,84 @@ import com.mfra.dnd.util.IBasicData;
  */
 public class SavingThrows extends ACheckeable implements Serializable {
 
-	/**
+    /**
 	 * 
 	 */
-	public enum SavingThrowName {
-		/**
+    public enum SavingThrowName {
+        /**
 		 * 
 		 */
-		FORTITUDE(Ability.AbilityName.CONSTITUTION),
-		/**
+        FORTITUDE(Ability.AbilityName.CONSTITUTION),
+        /**
 		 * 
 		 */
-		REFLEX(Ability.AbilityName.DEXTERITY),
-		/**
+        REFLEX(Ability.AbilityName.DEXTERITY),
+        /**
 		 * 
 		 */
-		WILL(Ability.AbilityName.WISDOM);
+        WILL(Ability.AbilityName.WISDOM);
 
-		private Ability.AbilityName abilityName;
+        private Ability.AbilityName abilityName;
 
-		private SavingThrowName(AbilityName abilityName) {
-			this.abilityName = abilityName;
-		}
+        private SavingThrowName(AbilityName abilityName) {
+            this.abilityName = abilityName;
+        }
 
-		/**
-		 * @return abilityName
-		 */
-		public Ability.AbilityName getAbilityName() {
-			return this.abilityName;
-		}
+        /**
+         * @return abilityName
+         */
+        public Ability.AbilityName getAbilityName() {
+            return this.abilityName;
+        }
 
-	}
+    }
 
-	/**
+    /**
 	 * 
 	 */
-	private static final long serialVersionUID = 2L;
+    private static final long serialVersionUID = 2L;
 
-	/**
-	 * @param name
-	 * @param checkProperties
-	 * @param descProperties
-	 */
-	public SavingThrows(SavingThrows.SavingThrowName name, IBasicData iBasicData) {
-		super(name, iBasicData, name.getAbilityName());
-	}
+    /**
+     * @param name
+     * @param checkProperties
+     * @param descProperties
+     */
+    public SavingThrows(SavingThrows.SavingThrowName name, IBasicData iBasicData) {
+        super(name, iBasicData, name.getAbilityName());
+    }
 
-	/**
-	 * @return getBaseAttack
-	 */
-	private int getBaseSavingThrow() {
-		return ((ADnDClass) this.iBasicData.getDescProperty(ADnDClass.KEY_NAME)).getBaseSavingThrow();
-	}
+    @Override
+    public String getHeader() {
+        return "Name\tBaseSavingThrow\tAbilityModifier\tTotalModifier";
+    }
 
-	@Override
-	protected String getFormat() {
-		StringBuilder stringBuilder = new StringBuilder();
-		stringBuilder.append("%s\t%d\t%d\t%d");
-		stringBuilder.append(System.getProperty("line.separator"));
-		return stringBuilder.toString();
-	}
+    @Override
+    public int getModifier() {
+        return this.getAbilityModifier() + this.getBaseSavingThrow();
+    }
 
-	@Override
-	public String getHeader() {
-		return "Name\tBaseSavingThrow\tAbilityModifier\tTotalModifier";
-	}
+    @Override
+    public String toString() {
+        String line = String.format(this.getFormat(), this.getName(),
 
-	@Override
-	public int getModifier() {
-		return this.getAbilityModifier() + this.getBaseSavingThrow();
-	}
+        this.getBaseSavingThrow(), this.getAbilityModifier(),
+                this.getModifier());
+        return line;
+    }
 
-	@Override
-	public String toString() {
-		String line = String.format(this.getFormat(), this.getName(),
+    /**
+     * @return getBaseAttack
+     */
+    private int getBaseSavingThrow() {
+        return ((ADnDClass) this.iBasicData.getDescProperty(ADnDClass.KEY_NAME))
+                .getBaseSavingThrow();
+    }
 
-				this.getBaseSavingThrow(), this.getAbilityModifier(), this.getModifier());
-		return line;
-	}
+    @Override
+    protected String getFormat() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("%s\t%d\t%d\t%d");
+        stringBuilder.append(System.getProperty("line.separator"));
+        return stringBuilder.toString();
+    }
 }

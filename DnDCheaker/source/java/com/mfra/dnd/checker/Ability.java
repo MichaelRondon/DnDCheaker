@@ -7,137 +7,138 @@ import com.mfra.dnd.util.IBasicData;
  */
 public class Ability extends ACheckeable {
 
-	/**
+    /**
 	 * 
 	 */
-	public enum AbilityName {
-		/**
+    public enum AbilityName {
+        /**
 		 * 
 		 */
-		CHARISMA,
-		/**
+        CHARISMA,
+        /**
 		 * 
 		 */
-		CONSTITUTION,
-		/**
+        CONSTITUTION,
+        /**
 		 * 
 		 */
-		DEXTERITY,
-		/**
+        DEXTERITY,
+        /**
 		 * 
 		 */
-		INTELLIGENCE,
-		/**
+        INTELLIGENCE,
+        /**
 		 * 
 		 */
-		STRENGTH,
-		/**
+        STRENGTH,
+        /**
 		 * 
 		 */
-		WISDOM;
-	}
+        WISDOM;
+    }
 
-	/**
+    /**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * @param value
-	 * @return (value - 10) >> 1
-	 */
-	public static int getAbilityModifier(int value) {
-		return (value - 10) >> 1;
-	}
+    /**
+     * @param value
+     * @return (value - 10) >> 1
+     */
+    public static int getAbilityModifier(int value) {
+        return value - 10 >> 1;
+    }
 
-	private int temporalScoreModifier;
+    private int temporalScoreModifier;
 
-	private int value;
+    private int value;
 
-	/**
-	 * @param name
-	 * @param value
-	 * @param checkProperties
-	 */
-	public Ability(AbilityName name, int value, IBasicData iBasicData) {
-		super(name, iBasicData, name);
-		this.addValue(value);
-	}
+    /**
+     * @param name
+     * @param value
+     * @param checkProperties
+     */
+    public Ability(AbilityName name, int value, IBasicData iBasicData) {
+        super(name, iBasicData, name);
+        this.addValue(value);
+    }
 
-	/**
-	 * @param valueToAdd
-	 */
-	public void addTemporalScoreModifier(int valueToAdd) {
-		this.temporalScoreModifier += valueToAdd;
-	}
+    /**
+     * @param valueToAdd
+     */
+    public void addTemporalScoreModifier(int valueToAdd) {
+        this.temporalScoreModifier += valueToAdd;
+    }
 
-	/**
-	 * @param valueToAdd
-	 */
-	protected void addValue(int valueToAdd) {
-		this.value += valueToAdd;
-	}
+    @Override
+    public int getAbilityModifier() {
+        return getAbilityModifier(this.getEfectyValue());
+    }
 
-	@Override
-	public int getAbilityModifier() {
-		return getAbilityModifier(this.getEfectyValue());
-	}
+    /**
+     * @param spellLevel
+     * @return BonusSpellBySpellLevel
+     */
+    public int getBonusSpellBySpellLevel(int spellLevel) {
+        int base = this.getEfectyValue() - spellLevel;
+        int resp = base - 3 >> 3;
+        resp = resp < 0 ? 0 : resp;
+        return resp;
+    }
 
-	/**
-	 * @param spellLevel
-	 * @return BonusSpellBySpellLevel
-	 */
-	public int getBonusSpellBySpellLevel(int spellLevel) {
-		int base = this.getEfectyValue() - spellLevel;
-		int resp = (base - 3) >> 3;
-		resp = (resp < 0) ? 0 : resp;
-		return resp;
-	}
+    /**
+     * @return value
+     */
+    public int getEfectyValue() {
+        return this.value + this.temporalScoreModifier;
+    }
 
-	/**
-	 * @return value
-	 */
-	public int getEfectyValue() {
-		return this.value + this.temporalScoreModifier;
-	}
+    /**
+     * @return header
+     */
+    @Override
+    public String getHeader() {
+        return "Name\tScore\tModifier";
+    }
 
-	/**
-	 * @return format
-	 */
-	@Override
-	protected String getFormat() {
-		StringBuilder stringBuilder = new StringBuilder();
-		stringBuilder.append("%s\t%d\t%d");
-		stringBuilder.append(System.getProperty("line.separator"));
-		return stringBuilder.toString();
-	}
+    @Override
+    public int getModifier() {
+        return this.getAbilityModifier();
+    }
 
-	/**
-	 * @return header
-	 */
-	@Override
-	public String getHeader() {
-		return "Name\tScore\tModifier";
-	}
+    /**
+     * @return value
+     */
+    public int getValue() {
+        return this.value;
+    }
 
-	@Override
-	public int getModifier() {
-		return this.getAbilityModifier();
-	}
-
-	/**
-	 * @return value
-	 */
-	public int getValue() {
-		return this.value;
-	}
-
-	/**
+    /**
 	 * 
 	 */
-	@Override
-	public String toString() {
-		String line = String.format(this.getFormat(), this.getName(), this.getValue(), this.getModifier());
-		return line;
-	}
+    @Override
+    public String toString() {
+        String line = String.format(this.getFormat(), this.getName(),
+                this.getValue(), this.getModifier());
+        return line;
+    }
+
+    /**
+     * @param valueToAdd
+     */
+    protected void addValue(int valueToAdd) {
+        this.value += valueToAdd;
+    }
+
+    /**
+     * @return format
+     */
+    @Override
+    protected String getFormat() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("%s\t%d\t%d");
+        stringBuilder.append(System.getProperty("line.separator"));
+        return stringBuilder.toString();
+    }
 }
