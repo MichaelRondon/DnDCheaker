@@ -17,5 +17,9 @@ public enum DescProperty implements IDescProperty {
 	/**
 	 * 
 	 */
-	CREATED;
+	CREATED,
+	/**
+	 * 
+	 */
+	DNDCLASS;
 }

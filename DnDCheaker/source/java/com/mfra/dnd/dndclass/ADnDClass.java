@@ -180,7 +180,7 @@ public abstract class ADnDClass extends ACharacterElement<ADnDClass.DnDClassName
 	public String toString() {
 
 		return DnDUtil.getInstance().simpleConcat(super.toString(), " Level:", this.getLevel().level, " (",
-				this.getXPPoints(), "/", this.getLevel().getNextRequiredXP(), ")");
+				this.getXPPoints(), "/", this.getLevel().getNextRequiredXP(), " XP)");
 	}
 
 	/**
