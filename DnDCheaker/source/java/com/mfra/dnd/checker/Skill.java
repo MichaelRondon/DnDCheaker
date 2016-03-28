@@ -10,188 +10,182 @@ import com.mfra.exceptions.GeneralException;
  */
 public class Skill extends ACheckeable {
 
-    /**
+	/**
 	 * 
 	 */
-    public enum SkillName {
-        /**
-		 * 
-		 */
-        APPRAISE(Ability.AbilityName.INTELLIGENCE, true),
-        /**
-		 * 
-		 */
-        CONCENTRATION(Ability.AbilityName.CONSTITUTION, true),
-        /**
-		 * 
-		 */
-        CRAFT(Ability.AbilityName.INTELLIGENCE, true),
-        /**
-		 * 
-		 */
-        DIPLOMACY(Ability.AbilityName.CHARISMA, true),
-        /**
-		 * 
-		 */
-        HANDLE_ANIMAL(Ability.AbilityName.CHARISMA, false),
-        /**
-		 * 
-		 */
-        HEAL(Ability.AbilityName.WISDOM, true),
-        /**
-		 * 
-		 */
-        KNOWLEDGE_NATURE(Ability.AbilityName.INTELLIGENCE, false),
-        /**
-		 * 
-		 */
-        LISTEN(Ability.AbilityName.WISDOM, true),
-        /**
-		 * 
-		 */
-        LITERATE(Ability.AbilityName.INTELLIGENCE, false),
-        /**
-		 * 
-		 */
-        PROFESSION(Ability.AbilityName.WISDOM, false),
-        /**
-		 * 
-		 */
-        RIDE(Ability.AbilityName.DEXTERITY, true),
-        /**
-		 * 
-		 */
-        SEARCH(Ability.AbilityName.INTELLIGENCE, true),
-        /**
-		 * 
-		 */
-        SPELLCRAFT(Ability.AbilityName.INTELLIGENCE, false),
-        /**
-		 * 
-		 */
-        SPOT(Ability.AbilityName.WISDOM, true),
-        /**
-		 * 
-		 */
-        SURVIVAL(Ability.AbilityName.WISDOM, true),
-        /**
-		 * 
-		 */
-        SWIM(Ability.AbilityName.STRENGTH, true);
+	public static final String SKILL_POINTS = "SKILL_POINTS";
 
-        private Ability.AbilityName abilityName;
-        private boolean untrained;
-
-        private SkillName(Ability.AbilityName abilityName, boolean untrained) {
-            this.abilityName = abilityName;
-            this.untrained = untrained;
-        }
-
-        /**
-         * @return abilityName
-         */
-        public Ability.AbilityName getAbilityName() {
-            return this.abilityName;
-        }
-
-        /**
-         * @return untrained
-         */
-        public boolean isUntrained() {
-            return this.untrained;
-        }
-
-    }
-
-    /**
+	/**
 	 * 
 	 */
-    private static final long serialVersionUID = 1L;
-    /**
+	private static final long serialVersionUID = 1L;
+	private int racialModifier;
+
+	private BigDecimal skillRanks = new BigDecimal(0);
+
+	/**
+	 * @param name
+	 * @param iBasicData
+	 */
+	public Skill(SkillName name, IBasicData iBasicData) {
+		super(name, iBasicData, name.getAbilityName());
+	}
+
+	/**
+	 * @param skillPointsToAdd
+	 */
+	public void addSkillRanks(BigDecimal skillPointsToAdd) {
+		this.skillRanks = this.skillRanks.add(skillPointsToAdd);
+	}
+
+	/**
 	 * 
 	 */
-    public static final String SKILL_POINTS = "SKILL_POINTS";
+	@Override
+	public void check(String characterName, Integer difficultyClass, int aditionalModifier) {
+		if (!((Skill.SkillName) this.getName()).untrained && this.skillRanks.intValue() <= 0) {
+			throw new GeneralException("This Skill isn't untrained");
+		}
+		// return super.check(characterName, difficultyClass,
+		// aditionalModifier);
+	}
 
-    private int racialModifier;
+	@Override
+	public String getHeader() {
+		return "Name\t\t\tSkillRanks\tAbilityModifier\tRacialModifier\tTotalModifier\tAbilityName\tUntrained";
+	}
 
-    private BigDecimal skillRanks = new BigDecimal(0);
+	@Override
+	public int getModifier() {
+		return this.getAbilityModifier() + this.skillRanks.intValue() + this.getRacialModifier();
+	}
 
-    /**
-     * @param name
-     * @param checkProperties
-     */
-    public Skill(SkillName name, IBasicData iBasicData) {
-        super(name, iBasicData, name.getAbilityName());
-    }
+	/**
+	 * @return skillPoints
+	 */
+	public BigDecimal getSkillRanks() {
+		return this.skillRanks;
+	}
 
-    /**
-     * @param skillPointsToAdd
-     */
-    public void addSkillRanks(BigDecimal skillPointsToAdd) {
-        this.skillRanks = this.skillRanks.add(skillPointsToAdd);
-    }
+	/**
+	 * 
+	 * @param racialModifier
+	 */
+	public void setRacialModifier(int racialModifier) {
+		this.racialModifier = racialModifier;
+	}
 
-    /**
+	@Override
+	public String toString() {
+		String line = String.format(this.getFormat(), this.getName(), this.getSkillRanks().doubleValue(),
+				this.getAbilityModifier(), this.getRacialModifier(), this.getModifier(),
+				((SkillName) this.getName()).abilityName, ((SkillName) this.getName()).untrained);
+		return line;
+	}
+
+	private int getRacialModifier() {
+		return this.racialModifier;
+	}
+
+	@Override
+	protected String getFormat() {
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append("%-16s\t%2.1f\t\t%d\t\t%d\t\t%d\t\t%-12s\t%-4s");
+		stringBuilder.append(System.getProperty("line.separator"));
+		return stringBuilder.toString();
+	}
+
+	/**
 	 * 
 	 */
-    @Override
-    public void check(String characterName, Integer difficultyClass,
-            int aditionalModifier) {
-        if (!((Skill.SkillName) this.getName()).untrained
-                && this.skillRanks.intValue() <= 0) {
-            throw new GeneralException("This Skill isn't untrained");
-        }
-        // return super.check(characterName, difficultyClass,
-        // aditionalModifier);
-    }
+	public enum SkillName {
+		/**
+		 * 
+		 */
+		APPRAISE(Ability.AbilityName.INTELLIGENCE, true),
+		/**
+		 * 
+		 */
+		CONCENTRATION(Ability.AbilityName.CONSTITUTION, true),
+		/**
+		 * 
+		 */
+		CRAFT(Ability.AbilityName.INTELLIGENCE, true),
+		/**
+		 * 
+		 */
+		DIPLOMACY(Ability.AbilityName.CHARISMA, true),
+		/**
+		 * 
+		 */
+		HANDLE_ANIMAL(Ability.AbilityName.CHARISMA, false),
+		/**
+		 * 
+		 */
+		HEAL(Ability.AbilityName.WISDOM, true),
+		/**
+		 * 
+		 */
+		KNOWLEDGE_NATURE(Ability.AbilityName.INTELLIGENCE, false),
+		/**
+		 * 
+		 */
+		LISTEN(Ability.AbilityName.WISDOM, true),
+		/**
+		 * 
+		 */
+		LITERATE(Ability.AbilityName.INTELLIGENCE, false),
+		/**
+		 * 
+		 */
+		PROFESSION(Ability.AbilityName.WISDOM, false),
+		/**
+		 * 
+		 */
+		RIDE(Ability.AbilityName.DEXTERITY, true),
+		/**
+		 * 
+		 */
+		SEARCH(Ability.AbilityName.INTELLIGENCE, true),
+		/**
+		 * 
+		 */
+		SPELLCRAFT(Ability.AbilityName.INTELLIGENCE, false),
+		/**
+		 * 
+		 */
+		SPOT(Ability.AbilityName.WISDOM, true),
+		/**
+		 * 
+		 */
+		SURVIVAL(Ability.AbilityName.WISDOM, true),
+		/**
+		 * 
+		 */
+		SWIM(Ability.AbilityName.STRENGTH, true);
 
-    @Override
-    public String getHeader() {
-        return "Name\t\t\tSkillRanks\tAbilityModifier\tRacialModifier\tTotalModifier\tAbilityName\tUntrained";
-    }
+		private Ability.AbilityName abilityName;
+		private boolean untrained;
 
-    @Override
-    public int getModifier() {
-        return this.getAbilityModifier() + this.skillRanks.intValue()
-                + this.getRacialModifier();
-    }
+		private SkillName(Ability.AbilityName abilityName, boolean untrained) {
+			this.abilityName = abilityName;
+			this.untrained = untrained;
+		}
 
-    /**
-     * @return skillPoints
-     */
-    public BigDecimal getSkillRanks() {
-        return this.skillRanks;
-    }
+		/**
+		 * @return abilityName
+		 */
+		public Ability.AbilityName getAbilityName() {
+			return this.abilityName;
+		}
 
-    /**
-     * 
-     * @param racialModifier
-     */
-    public void setRacialModifier(int racialModifier) {
-        this.racialModifier = racialModifier;
-    }
+		/**
+		 * @return untrained
+		 */
+		public boolean isUntrained() {
+			return this.untrained;
+		}
 
-    @Override
-    public String toString() {
-        String line = String
-                .format(this.getFormat(), this.getName(), this.getSkillRanks()
-                        .doubleValue(), this.getAbilityModifier(), this
-                        .getRacialModifier(), this.getModifier(),
-                        ((SkillName) this.getName()).abilityName,
-                        ((SkillName) this.getName()).untrained);
-        return line;
-    }
-
-    private int getRacialModifier() {
-        return this.racialModifier;
-    }
-
-    @Override
-    protected String getFormat() {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("%-16s\t%2.1f\t\t%d\t\t%d\t\t%d\t\t%-12s\t%-4s");
-        stringBuilder.append(System.getProperty("line.separator"));
-        return stringBuilder.toString();
-    }
+	}
 
 }

@@ -21,203 +21,203 @@ import com.mfra.exceptions.GeneralException;
  */
 public class DnDUtil extends StringBuilderWriter {
 
-    private static class LazyHolder { // $codepro.audit.disable
+	private static final BigDecimal FEET_TO_METER_CONSTANT = new BigDecimal("0.3048");
 
-        // missingStaticMethod
+	private static final BigDecimal POUNDS_TO_KG = new BigDecimal("0.453592");
 
-        private static final DnDUtil INSTANCE = new DnDUtil();
-    }
+	private DnDUtil() {
 
-    private static final BigDecimal FEET_TO_METER_CONSTANT = new BigDecimal(
-            "0.3048");
+	}
 
-    private static final BigDecimal POUNDS_TO_KG = new BigDecimal("0.453592");
+	/**
+	 * @param feets
+	 * @return bigDecimal.multiply(FEET_TO_METER_CONSTANT);
+	 */
+	public BigDecimal feetToMeters(int feets) {
+		BigDecimal bigDecimal = new BigDecimal(feets);
+		return bigDecimal.multiply(FEET_TO_METER_CONSTANT);
 
-    /**
-     * @return Util
-     */
-    public static DnDUtil getInstance() {
-        return LazyHolder.INSTANCE;
-    }
+	}
 
-    private DnDUtil() {
+	/**
+	 * @param hero
+	 */
+	public void generateAbilityRamdomScores(boolean hero) {
 
-    }
+		int result;
+		int highest = -1;
+		int sumModifier = -1;
 
-    /**
-     * @param feets
-     * @return bigDecimal.multiply(FEET_TO_METER_CONSTANT);
-     */
-    public BigDecimal feetToMeters(int feets) {
-        BigDecimal bigDecimal = new BigDecimal(feets);
-        return bigDecimal.multiply(FEET_TO_METER_CONSTANT);
+		while (highest <= 13 && sumModifier <= 0) {
+			this.stringBuilder = new StringBuilder();
+			this.stringBuilder.append("Checks for ramdom ability scores. The results were:");
+			for (int i = 0; i < 6; i++) {
+				if (i != 0) {
+					this.stringBuilder.append('-');
+				}
+				result = this.getAbilityRamdomScore(hero);
+				this.stringBuilder.append(result);
+				sumModifier += Ability.getAbilityModifier(result);
+				highest = result >= highest ? result : highest;
+			}
+			if (!hero) {
+				break;
+			}
 
-    }
+		}
 
-    /**
-     * @param hero
-     */
-    public void generateAbilityRamdomScores(boolean hero) {
+		System.out.println(this.stringBuilder.toString());
+	}
 
-        int result;
-        int highest = -1;
-        int sumModifier = -1;
+	/**
+	 * @return DecimalFormat("#########.#")
+	 */
+	public DecimalFormat getDecimalFormat() {
+		return new DecimalFormat("#########.#");
+	}
 
-        while (highest <= 13 && sumModifier <= 0) {
-            this.stringBuilder = new StringBuilder();
-            this.stringBuilder
-                    .append("Checks for ramdom ability scores. The results were:");
-            for (int i = 0; i < 6; i++) {
-                if (i != 0) {
-                    this.stringBuilder.append('-');
-                }
-                result = this.getAbilityRamdomScore(hero);
-                this.stringBuilder.append(result);
-                sumModifier += Ability.getAbilityModifier(result);
-                highest = result >= highest ? result : highest;
-            }
-            if (!hero) {
-                break;
-            }
+	/**
+	 * 
+	 * @param array
+	 * @return intArrayToString
+	 */
+	public String intArrayToString(int[] array) {
+		StringBuilder stringBuilder = new StringBuilder();
+		for (int i : array) {
+			stringBuilder.append(i);
+			stringBuilder.append('/');
+		}
+		stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+		return stringBuilder.toString();
+	}
 
-        }
+	/**
+	 * @param pounds
+	 * @return bigDecimal.multiply(POUNDS_TO_KG);
+	 */
+	public BigDecimal pundsToKilograms(BigDecimal pounds) {
+		BigDecimal bigDecimal = pounds;
+		return bigDecimal.multiply(POUNDS_TO_KG);
 
-        System.out.println(this.stringBuilder.toString());
-    }
+	}
 
-    /**
-     * @return DecimalFormat("#########.#")
-     */
-    public DecimalFormat getDecimalFormat() {
-        return new DecimalFormat("#########.#");
-    }
+	/**
+	 * @param pounds
+	 * @return bigDecimal.multiply(POUNDS_TO_KG);
+	 */
+	public BigDecimal pundsToKilograms(int pounds) {
+		BigDecimal bigDecimal = new BigDecimal(pounds);
+		return bigDecimal.multiply(POUNDS_TO_KG);
 
-    /**
-     * 
-     * @param array
-     * @return intArrayToString
-     */
-    public String intArrayToString(int[] array) {
-        StringBuilder stringBuilder = new StringBuilder();
-        for (int i : array) {
-            stringBuilder.append(i);
-            stringBuilder.append('/');
-        }
-        stringBuilder.deleteCharAt(stringBuilder.length() - 1);
-        return stringBuilder.toString();
-    }
+	}
 
-    /**
-     * @param pounds
-     * @return bigDecimal.multiply(POUNDS_TO_KG);
-     */
-    public BigDecimal pundsToKilograms(BigDecimal pounds) {
-        BigDecimal bigDecimal = pounds;
-        return bigDecimal.multiply(POUNDS_TO_KG);
+	/**
+	 * @param args
+	 *            Texto a concatenar.
+	 * @return Concatena dos textos.
+	 */
+	public String simpleConcat(Object... args) {
+		StringBuilder stringBuilder = new StringBuilder();
+		for (Object object : args) {
+			if (object != null) {
+				stringBuilder.append(object);
+			}
+		}
+		return stringBuilder.toString();
 
-    }
+	}
 
-    /**
-     * @param pounds
-     * @return bigDecimal.multiply(POUNDS_TO_KG);
-     */
-    public BigDecimal pundsToKilograms(int pounds) {
-        BigDecimal bigDecimal = new BigDecimal(pounds);
-        return bigDecimal.multiply(POUNDS_TO_KG);
+	/**
+	 * @param checkProperties
+	 */
+	@Deprecated
+	public void validAreAbilitiesSet(HashMap<Enum<?>, ACheckeable> checkProperties) {
 
-    }
+		AbilityName[] values = AbilityName.values();
+		for (AbilityName abilityName : values) {
+			ACheckeable aCheckeable = checkProperties.get(abilityName);
+			if (((Ability) aCheckeable).getValue() == 0) {
+				throw new GeneralException("You must set the abilities first");
+			}
+		}
+	}
 
-    /**
-     * @param args
-     *            Texto a concatenar.
-     * @return Concatena dos textos.
-     */
-    public String simpleConcat(Object... args) {
-        StringBuilder stringBuilder = new StringBuilder();
-        for (Object object : args) {
-            if (object != null) {
-                stringBuilder.append(object);
-            }
-        }
-        return stringBuilder.toString();
+	/**
+	 * @param descProperties
+	 */
+	@Deprecated
+	public void validIsClassSet(HashMap<String, Object> descProperties) {
+		if (!descProperties.containsKey(ADnDClass.KEY_NAME)) {
+			throw new GeneralException("You must set the class first");
+		}
+	}
 
-    }
+	/**
+	 * @param descProperties
+	 */
+	@Deprecated
+	public void validIsRaceSet(HashMap<String, Object> descProperties) {
+		if (!descProperties.containsKey(ARace.KEY_NAME)) {
+			throw new GeneralException("You must set the race first");
+		}
+	}
 
-    /**
-     * @param checkProperties
-     */
-    @Deprecated
-    public void validAreAbilitiesSet(
-            HashMap<Enum<?>, ACheckeable> checkProperties) {
+	/**
+	 * @param descProperties
+	 * @return If the character was created.
+	 */
+	@Deprecated
+	public boolean wasCreated(HashMap<String, Object> descProperties) {
+		boolean resp = false;
+		if (descProperties != null && descProperties.containsKey(DescProperty.CREATED.toString())) {
+			Object object = descProperties.get(DescProperty.CREATED.toString());
+			if (object instanceof Boolean) {
+				resp = (Boolean) object;
+			}
+		}
+		return resp;
+	}
 
-        AbilityName[] values = AbilityName.values();
-        for (AbilityName abilityName : values) {
-            ACheckeable aCheckeable = checkProperties.get(abilityName);
-            if (((Ability) aCheckeable).getValue() == 0) {
-                throw new GeneralException("You must set the abilities first");
-            }
-        }
-    }
+	private Integer getAbilityRamdomScore(boolean hero) {
+		int sum = 0;
+		List<Integer> results = new ArrayList<Integer>();
+		IDice dice = Dice.getDice(6);
+		Integer lower = 19;
+		int roll;
+		this.stringBuilder.append('(');
+		int dices = hero ? 4 : 3;
+		for (int i = 0; i < dices; i++) {
+			roll = dice.rollDice(null, 1, 0).getLastValue();
+			if (i != 0) {
+				this.stringBuilder.append(',');
+			}
+			lower = roll < lower ? roll : lower;
+			this.stringBuilder.append(roll);
+			results.add(roll);
+		}
+		this.stringBuilder.append(')');
+		if (hero) {
+			results.remove(results.indexOf(lower));
+		}
+		for (Integer integer : results) {
+			sum += integer;
+		}
 
-    /**
-     * @param descProperties
-     */
-    @Deprecated
-    public void validIsClassSet(HashMap<String, Object> descProperties) {
-        if (!descProperties.containsKey(ADnDClass.KEY_NAME)) {
-            throw new GeneralException("You must set the class first");
-        }
-    }
+		return sum;
+	}
 
-    /**
-     * @param descProperties
-     */
-    @Deprecated
-    public void validIsRaceSet(HashMap<String, Object> descProperties) {
-        if (!descProperties.containsKey(ARace.KEY_NAME)) {
-            throw new GeneralException("You must set the race first");
-        }
-    }
+	/**
+	 * @return Util
+	 */
+	public static DnDUtil getInstance() {
+		return LazyHolder.INSTANCE;
+	}
 
-    @Deprecated
-    public boolean wasCreated(HashMap<String, Object> descProperties) {
-        boolean resp = false;
-        if (descProperties != null
-                && descProperties.containsKey(DescProperty.CREATED.toString())) {
-            Object object = descProperties.get(DescProperty.CREATED.toString());
-            if (object instanceof Boolean) {
-                resp = (Boolean) object;
-            }
-        }
-        return resp;
-    }
+	private static class LazyHolder { // $codepro.audit.disable
 
-    private Integer getAbilityRamdomScore(boolean hero) {
-        int sum = 0;
-        List<Integer> results = new ArrayList<Integer>();
-        IDice dice = Dice.getDice(6);
-        Integer lower = 19;
-        int roll;
-        this.stringBuilder.append('(');
-        int dices = hero ? 4 : 3;
-        for (int i = 0; i < dices; i++) {
-            roll = dice.rollDice(null, 1, 0).getLastValue();
-            if (i != 0) {
-                this.stringBuilder.append(',');
-            }
-            lower = roll < lower ? roll : lower;
-            this.stringBuilder.append(roll);
-            results.add(roll);
-        }
-        this.stringBuilder.append(')');
-        if (hero) {
-            results.remove(results.indexOf(lower));
-        }
-        for (Integer integer : results) {
-            sum += integer;
-        }
+		// missingStaticMethod
 
-        return sum;
-    }
+		private static final DnDUtil INSTANCE = new DnDUtil();
+	}
 
 }

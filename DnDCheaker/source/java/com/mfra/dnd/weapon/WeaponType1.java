@@ -4,28 +4,28 @@ package com.mfra.dnd.weapon;
  * @author Michael Felipe Rondón Acosta
  */
 public enum WeaponType1 {
-    /**
+	/**
 	 * 
 	 */
-    BLUDGEONING,
-    /**
+	BLUDGEONING,
+	/**
 	 * 
 	 */
-    BLUDGEONING_AND_PIERCING,
-    /**
+	BLUDGEONING_AND_PIERCING,
+	/**
 	 * 
 	 */
-    PIERCING,
-    /**
+	PIERCING,
+	/**
 	 * 
 	 */
-    PIERCING_OR_SLASHING,
-    /**
+	PIERCING_OR_SLASHING,
+	/**
 	 * 
 	 */
-    SLASHING,
-    /**
+	SLASHING,
+	/**
 	 * 
 	 */
-    SLASHING_OR_PIERCING;
+	SLASHING_OR_PIERCING;
 }

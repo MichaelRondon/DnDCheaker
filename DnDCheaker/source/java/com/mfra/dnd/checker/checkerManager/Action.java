@@ -7,31 +7,31 @@ import com.mfra.dnd.checker.checkerManager.model.ACheckerManager;
  * @author Michael Felipe Rondón Acosta
  */
 public enum Action {
-    /**
+	/**
 	* 
 	*/
-    INICIATIVE(Ability.AbilityName.DEXTERITY, null);
+	INICIATIVE(Ability.AbilityName.DEXTERITY, null);
 
-    private Enum<?> checkeableName;
-    private ACheckerManager checkerManager;
+	private Enum<?> checkeableName;
+	private ACheckerManager checkerManager;
 
-    private Action(Enum<?> checkeableName, ACheckerManager checkerManager) {
-        this.checkeableName = checkeableName;
-        this.checkerManager = checkerManager;
-    }
+	private Action(Enum<?> checkeableName, ACheckerManager checkerManager) {
+		this.checkeableName = checkeableName;
+		this.checkerManager = checkerManager;
+	}
 
-    /**
-     * @return checkeableName
-     */
-    public Enum<?> getCheckeableName() {
-        return this.checkeableName;
-    }
+	/**
+	 * @return checkeableName
+	 */
+	public Enum<?> getCheckeableName() {
+		return this.checkeableName;
+	}
 
-    /**
-     * @return checkerManager
-     */
-    public ACheckerManager getCheckerManager() {
-        return this.checkerManager;
-    }
+	/**
+	 * @return checkerManager
+	 */
+	public ACheckerManager getCheckerManager() {
+		return this.checkerManager;
+	}
 
 }

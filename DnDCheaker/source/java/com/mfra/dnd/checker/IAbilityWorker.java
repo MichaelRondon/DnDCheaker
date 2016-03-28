@@ -5,14 +5,14 @@ package com.mfra.dnd.checker;
  */
 public interface IAbilityWorker {
 
-    /**
-     * @return AbilityModifier
-     */
-    public int getAbilityModifier();
+	/**
+	 * @return AbilityModifier
+	 */
+	public int getAbilityModifier();
 
-    /**
-     * @return getAbilityName()
-     */
-    public Ability.AbilityName getAbilityName();
+	/**
+	 * @return getAbilityName()
+	 */
+	public Ability.AbilityName getAbilityName();
 
 }

@@ -4,93 +4,93 @@ package com.mfra.dnd.language;
  * @author Michael Felipe Rondón Acosta
  */
 public enum Language {
-    /**
+	/**
 	 * 
 	 */
-    ABYSSAL,
-    /**
+	ABYSSAL,
+	/**
 	 * 
 	 */
-    AQUAN,
-    /**
+	AQUAN,
+	/**
 	 * 
 	 */
-    AURAN,
-    /**
+	AURAN,
+	/**
 	 * 
 	 */
-    CELESTIAL,
-    /**
+	CELESTIAL,
+	/**
 	 * 
 	 */
-    COMMON,
-    /**
+	COMMON,
+	/**
 	 * 
 	 */
-    CREATURES,
-    /**
+	CREATURES,
+	/**
 	 * 
 	 */
-    DRACONIC,
-    /**
+	DRACONIC,
+	/**
 	 * 
 	 */
-    DRAGONS,
-    /**
+	DRAGONS,
+	/**
 	 * 
 	 */
-    DRUIDIC,
-    /**
+	DRUIDIC,
+	/**
 	 * 
 	 */
-    DWARVEN,
-    /**
+	DWARVEN,
+	/**
 	 * 
 	 */
-    ELVEN,
-    /**
+	ELVEN,
+	/**
 	 * 
 	 */
-    GIANT,
-    /**
+	GIANT,
+	/**
 	 * 
 	 */
-    GNOLL,
-    /**
+	GNOLL,
+	/**
 	 * 
 	 */
-    GNOME,
-    /**
+	GNOME,
+	/**
 	 * 
 	 */
-    GOBLIN,
-    /**
+	GOBLIN,
+	/**
 	 * 
 	 */
-    HALFLING,
-    /**
+	HALFLING,
+	/**
 	 * 
 	 */
-    IGNAN,
-    /**
+	IGNAN,
+	/**
 	 * 
 	 */
-    INFERNAL,
-    /**
+	INFERNAL,
+	/**
 	 * 
 	 */
-    ORC,
-    /**
+	ORC,
+	/**
 	 * 
 	 */
-    SYLVAN,
-    /**
+	SYLVAN,
+	/**
 	 * 
 	 */
-    TERRAN,
-    /**
+	TERRAN,
+	/**
 	 * 
 	 */
-    UNDERCOMMON;
-    ;
+	UNDERCOMMON;
+	;
 }

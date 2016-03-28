@@ -10,35 +10,34 @@ import com.mfra.dnd.util.IBasicData;
  */
 public class Acrobatic extends AFeat<Object> {
 
-    /**
+	/**
 	 * 
 	 */
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    /**
-     * @param nameElement
-     * @param checkProperties
-     * @param descProperties
-     */
-    public Acrobatic(FeatName nameElement, IBasicData iBasicData) {
-        super(nameElement, iBasicData);
-    }
+	/**
+	 * @param nameElement
+	 * @param iBasicData
+	 */
+	public Acrobatic(FeatName nameElement, IBasicData iBasicData) {
+		super(nameElement, iBasicData);
+	}
 
-    @Override
-    public Set<Object> getElements() {
-        return new HashSet<Object>();
-    }
+	@Override
+	public Set<Object> getElements() {
+		return new HashSet<Object>();
+	}
 
-    @Override
-    protected void addElement(Object element) {
-    }
+	@Override
+	protected void addElement(Object element) {
+	}
 
-    @Override
-    protected void setBenefits() {
-    }
+	@Override
+	protected void setBenefits() {
+	}
 
-    @Override
-    protected void validPrerequisites() {
-    }
+	@Override
+	protected void validPrerequisites() {
+	}
 
 }

@@ -9,24 +9,21 @@ import com.mfra.dnd.util.IBasicData;
  */
 public class AttackBonusManager extends ACheckManager {
 
-    /**
+	/**
 	 * 
 	 */
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    /**
-     * @param checkProperties
-     * @param descProperties
-     */
-    public AttackBonusManager(IBasicData iBasicData) {
-        super(iBasicData);
-    }
+	/**
+	 * @param iBasicData
+	 */
+	public AttackBonusManager(IBasicData iBasicData) {
+		super(iBasicData);
+	}
 
-    @Override
-    public void init() {
-        super.setProperty(new AttackBonus(AttackName.MELEE_ATTACK,
-                this.iBasicData));
-        super.setProperty(new AttackBonus(AttackName.RANGED_ATTACK,
-                this.iBasicData));
-    }
+	@Override
+	public void init() {
+		super.setProperty(new AttackBonus(AttackName.MELEE_ATTACK, this.iBasicData));
+		super.setProperty(new AttackBonus(AttackName.RANGED_ATTACK, this.iBasicData));
+	}
 }

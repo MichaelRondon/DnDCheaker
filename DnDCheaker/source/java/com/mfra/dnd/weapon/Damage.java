@@ -13,37 +13,40 @@ import com.mfra.dnd.util.IBasicData;
  */
 public class Damage extends AbilityWorker {
 
-    private IDice dice;
-
-    /**
-     * @param checkProperties
-     * @param abilityName
-     * @param descProperties
-     */
-    public Damage(HashMap<Enum<?>, ACheckeable> checkProperties,
-            AbilityName abilityName, IBasicData iBasicData) {
-        super(iBasicData, abilityName);
-
-    }
-
-    /**
+	/**
+	 * 
 	 */
-    public void makeDamage() {
-        this.stringBuilder = new StringBuilder();
-        this.stringBuilder.append("To makes damage ");
-        int resp = 0;
-        if (this.dice != null) {
-            IDice rollDice = this.dice.rollDice();
-            this.stringBuilder.append(rollDice.getStringFromBuilder());
-            resp += rollDice.getLastValue();
-        }
+	private static final long serialVersionUID = 1L;
+	private IDice dice;
 
-    }
+	/**
+	 * @param checkProperties
+	 * @param abilityName
+	 * @param iBasicData
+	 */
+	public Damage(HashMap<Enum<?>, ACheckeable> checkProperties, AbilityName abilityName, IBasicData iBasicData) {
+		super(iBasicData, abilityName);
 
-    /**
-     * @param diceModifier
-     */
-    public void setDiceModifier(IDice diceModifier) {
-        this.dice = diceModifier;
-    }
+	}
+
+	/**
+	 */
+	public void makeDamage() {
+		this.stringBuilder = new StringBuilder();
+		this.stringBuilder.append("To makes damage ");
+		// int resp = 0;
+		if (this.dice != null) {
+			IDice rollDice = this.dice.rollDice();
+			this.stringBuilder.append(rollDice.getStringFromBuilder());
+			// resp += rollDice.getLastValue();
+		}
+
+	}
+
+	/**
+	 * @param diceModifier
+	 */
+	public void setDiceModifier(IDice diceModifier) {
+		this.dice = diceModifier;
+	}
 }

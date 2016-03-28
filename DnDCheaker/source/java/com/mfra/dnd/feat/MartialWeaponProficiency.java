@@ -13,48 +13,46 @@ import com.mfra.exceptions.GeneralException;
  */
 public class MartialWeaponProficiency extends AFeat<WeaponName> {
 
-    /**
+	/**
 	 * 
 	 */
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    private final Set<WeaponName> weapons = new HashSet<WeaponName>();
+	private final Set<WeaponName> weapons = new HashSet<WeaponName>();
 
-    /**
-     * @param nameElement
-     * @param checkProperties
-     * @param descProperties
-     */
-    public MartialWeaponProficiency(
-            com.mfra.dnd.feat.AFeat.FeatName nameElement, IBasicData iBasicData) {
-        super(nameElement, iBasicData);
-    }
+	/**
+	 * @param nameElement
+	 * @param iBasicData
+	 */
+	public MartialWeaponProficiency(com.mfra.dnd.feat.AFeat.FeatName nameElement, IBasicData iBasicData) {
+		super(nameElement, iBasicData);
+	}
 
-    @Override
-    public Set<WeaponName> getElements() {
-        return this.weapons;
-    }
+	@Override
+	public Set<WeaponName> getElements() {
+		return this.weapons;
+	}
 
-    @Override
-    protected void addElement(WeaponName element) {
-        if (element.getWeaponType3().equals(WeaponType3.MARTIAL_WEAPONS)) {
-            this.weapons.add(element);
-        } else {
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("This element: ");
-            stringBuilder.append(element);
-            stringBuilder.append(" is not allowed for this feat: ");
-            stringBuilder.append(this.toString());
-            throw new GeneralException(stringBuilder.toString());
-        }
-    }
+	@Override
+	protected void addElement(WeaponName element) {
+		if (element.getWeaponType3().equals(WeaponType3.MARTIAL_WEAPONS)) {
+			this.weapons.add(element);
+		} else {
+			StringBuilder stringBuilder = new StringBuilder();
+			stringBuilder.append("This element: ");
+			stringBuilder.append(element);
+			stringBuilder.append(" is not allowed for this feat: ");
+			stringBuilder.append(this.toString());
+			throw new GeneralException(stringBuilder.toString());
+		}
+	}
 
-    @Override
-    protected void setBenefits() {
-    }
+	@Override
+	protected void setBenefits() {
+	}
 
-    @Override
-    protected void validPrerequisites() {
-    }
+	@Override
+	protected void validPrerequisites() {
+	}
 
 }

@@ -6,8 +6,8 @@ package com.mfra.dnd.misc;
  * 
  */
 public enum Misc {
-    /**
-	 * 
-	 */
-    CHARACTER_NAME;
+	// /**
+	// *
+	// */
+	// CHARACTER_NAME;
 }

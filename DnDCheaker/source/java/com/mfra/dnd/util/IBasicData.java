@@ -4,39 +4,86 @@ import java.io.Serializable;
 
 import com.mfra.dnd.checker.ACheckeable;
 
+/**
+ * 
+ * @author Michael Felipe Rondón Acosta
+ *
+ */
 public interface IBasicData extends Serializable {
-    public boolean containsCheckProperty(Enum<?> checkProperty);
 
-    public boolean containsDescProperty(String descProperty);
+	/**
+	 * 
+	 * @param checkProperty
+	 * @return if the list of the checker elements contains this key
+	 */
+	public boolean containsCheckProperty(Enum<?> checkProperty);
 
-    // public HashMap<Enum<?>, ACheckeable> getCheckProperties();
+	/**
+	 * 
+	 * @param descProperty
+	 * @return if the list of the description elements contains this key
+	 */
+	public boolean containsDescProperty(String descProperty);
 
-    public ACheckeable getCheckProperty(Enum<?> checkProperty);
+	// public HashMap<Enum<?>, ACheckeable> getCheckProperties();
 
-    // public HashMap<String, Object> getDescProperties();
+	/**
+	 * 
+	 * @param checkProperty
+	 * @return get the value of this key from the checker elements
+	 */
+	public ACheckeable getCheckProperty(Enum<?> checkProperty);
 
-    public Object getDescProperty(String descProperty);
+	// public HashMap<String, Object> getDescProperties();
 
-    public void putCheckProperty(Enum<?> enumeration, ACheckeable aCheckeable);
+	/**
+	 * 
+	 * @param descProperty
+	 * @return get the value of this key from the description elements
+	 */
+	public Object getDescProperty(String descProperty);
 
-    public void putDescProperty(String descProperty, Object object);
+	/**
+	 * 
+	 * @param enumeration
+	 * @param aCheckeable
+	 */
+	public void putCheckProperty(Enum<?> enumeration, ACheckeable aCheckeable);
 
-    public void removeCheckProperty(Enum<?> checkProperty);
+	/**
+	 * 
+	 * @param descProperty
+	 * @param object
+	 */
+	public void putDescProperty(String descProperty, Object object);
 
-    /**
-     * @param checkProperties
-     */
-    public void validAreAbilitiesSet();
+	/**
+	 * 
+	 * @param checkProperty
+	 */
+	public void removeCheckProperty(Enum<?> checkProperty);
 
-    /**
-     * @param descProperties
-     */
-    public void validIsClassSet();
+	/**
+	 * @return Returns the description contain in a string.
+	 * 
+	 */
+	public String showDescProperties();
 
-    /**
-     * @param descProperties
-     */
-    public void validIsRaceSet();
+	/**
+	 */
+	public void validAreAbilitiesSet();
 
-    public boolean wasCreated();
+	/**
+	 */
+	public void validIsClassSet();
+
+	/**
+	 */
+	public void validIsRaceSet();
+
+	/**
+	 * 
+	 * @return If the character has the atrribute "Created"
+	 */
+	public boolean wasCreated();
 }
